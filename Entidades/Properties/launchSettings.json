@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Entidades": {
+      "commandName": "Project"
+    },
+    "Perfil 1": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\alumno\\Documents\\Visual Studio 2022\\Templates\\ProjectTemplates\\C#\\Parcial-TP1-2022-2-master\\SysAcademy2"
+    }
+  }
+}
