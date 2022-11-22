@@ -31,17 +31,22 @@ namespace SysAcademy2
                 Materia materia = SqlMateria.ObtenerMateria(materiaElegida);
 
                 if (SqlAlumnos.CantMateriasAlumno(alumno.GetID()) != 2)
-                {
-                    if (SqlAlumnos.VerifMateriasAlumno(alumno.GetID(), materia.GetID()))
+                { if(materia != null)
                     {
-                        alumno.materiaA = materia.GetID();
-                        SqlAlumnos.InsertarAlumno(alumno);
-                        //Usuarios.listaAlumnos.Add(alumno);
-                        btnc_InsBaja.Text = "Dejar de Cursar";
-                    }
-                    else
+                        if (SqlAlumnos.VerifMateriasAlumno(alumno.GetID(), materia.GetID()))
+                        {
+                            alumno.materiaA = materia.GetID();
+                            SqlAlumnos.InsertarAlumno(alumno);
+                            //Usuarios.listaAlumnos.Add(alumno);
+                            btnc_InsBaja.Text = "Dejar de Cursar";
+                        }
+                        else
+                        {
+                            MessageBox.Show("Aqui deberias poder desinscribirte");
+                        }
+                    } else
                     {
-                        MessageBox.Show("Aqui deberias poder desinscribirte");
+                        MessageBox.Show("ERRROR, Contacte un Administrador");
                     }
 
                 } else

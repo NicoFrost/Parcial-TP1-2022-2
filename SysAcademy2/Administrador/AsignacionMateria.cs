@@ -45,22 +45,25 @@ namespace SysAcademy2
                 string buscar = listBox1.SelectedItem.ToString();
                 var materia = SqlMateria.ObtenerMateria(buscar);
                 //var materia = M.listaMaterias.Find(objeto => objeto.GetNombre() == buscar);
-                txt_Nombre.Text = materia.GetNombre();
-                int ProfesorID = materia.GetProfesorAsignado();
-                var UserProfesor = SqlUsuario.ObtenerUsuario(ProfesorID);
-                if (!(UserProfesor == null || ProfesorID == -1))
+                if(materia != null)
                 {
-                    Cbx_Profesores.Text = UserProfesor.GetNombre();
-                } else
-                {
-                    if(ProfesorID == -1)
+                    txt_Nombre.Text = materia.GetNombre();
+                    int ProfesorID = materia.GetProfesorAsignado();
+                    var UserProfesor = SqlUsuario.ObtenerUsuario(ProfesorID);
+                    if (!(UserProfesor == null || ProfesorID == -1))
                     {
-                        Cbx_Profesores.Text = "Ninguno";
+                        Cbx_Profesores.Text = UserProfesor.GetNombre();
                     } else
                     {
-                        Cbx_Profesores.Text = null;
-                    }
-                };
+                        if(ProfesorID == -1)
+                        {
+                            Cbx_Profesores.Text = "Ninguno";
+                        } else
+                        {
+                            Cbx_Profesores.Text = null;
+                        }
+                    };
+                }
 
                 btn_Exportar.Enabled = true;
             }

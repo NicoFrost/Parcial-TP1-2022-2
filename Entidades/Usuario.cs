@@ -135,48 +135,48 @@ namespace Entidades
             //}
         }
     }
-    public class AlumnoJSON
-    {
-        private string id;
-        private int ;
-        private List<Empleado> personalACargo;
-        private decimal salario;
+    //public class AlumnoJSON
+    //{
+    //    private string id;
+    //    private int A;
+    //    private List<Empleado> personalACargo;
+    //    private decimal salario;
 
-        public string NombreCompleto
-        {
-            get
-            {
-                return nombreCompleto;
-            }
-            set
-            {
-                nombreCompleto = value;
-            }
-        }
+    //    public string NombreCompleto
+    //    {
+    //        get
+    //        {
+    //            return nombreCompleto;
+    //        }
+    //        set
+    //        {
+    //            nombreCompleto = value;
+    //        }
+    //    }
 
-        public DateTime FechaNacimiento
-        {
-            get
-            {
-                return fechaNacimiento;
-            }
-            set
-            {
-                fechaNacimiento = value;
-            }
-        }
+    //    public DateTime FechaNacimiento
+    //    {
+    //        get
+    //        {
+    //            return fechaNacimiento;
+    //        }
+    //        set
+    //        {
+    //            fechaNacimiento = value;
+    //        }
+    //    }
 
-        public decimal Salario
-        {
-            get
-            {
-                return salario;
-            }
-            set
-            {
-                salario = value;
-            }
-        }
+    //    public decimal Salario
+    //    {
+    //        get
+    //        {
+    //            return salario;
+    //        }
+    //        set
+    //        {
+    //            salario = value;
+    //        }
+    //    }
 
-    }
+    //}
 }
