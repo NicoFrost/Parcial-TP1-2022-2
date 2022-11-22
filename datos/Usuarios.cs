@@ -1,4 +1,5 @@
 ﻿using Entidades;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
@@ -8,6 +9,7 @@ namespace datos
     {
         public static List<Usuario> listaUsuarios = new();
         public static List<Alumno> listaAlumnos = new();
+
 
         public static int IdIncremental(List<Usuario> lista)
         {
@@ -144,11 +146,11 @@ namespace datos
 
         }
 
-            public static bool VerifMaterias(Alumno alumno,int idMateria)
+        public static bool VerifMaterias(Alumno alumno,int idMateria)
         {
             foreach(var user in listaAlumnos)
             {
-                if(alumno != null && user.GetID() == alumno.GetID() && (alumno.materiaA == idMateria || alumno.materiaB == idMateria))
+//                if(alumno != null && user.GetID() == alumno.GetID() && (alumno.materiaA == idMateria || alumno.materiaB == idMateria))
                 {
                     return true;
                 }

@@ -42,17 +42,17 @@ namespace SysAcademy
             {
                  
                 Examen NuevoExamen = new Examen();
-                NuevoExamen.SetID(Examenes.IdIncremental(Examenes.listaExamenes));
                 NuevoExamen.SetNombre(txt_NombreExamen.Text);
                 NuevoExamen.fecha = fcal_Eleccion.SelectionRange.Start;
                 if(cb_Materia.SelectedItem != null)
                 {
                     NuevoExamen.materia = Materias.BuscarMateria(cb_Materia.SelectedItem.ToString());
+                    DateTime fecha = NuevoExamen.fecha.Date;
 
+                    Sql.InsertarExamen(NuevoExamen);
+                    lb_Examenes.Items.Add($"{NuevoExamen.GetNombre()} {fecha.ToString("d")} ({Materias.BuscarMateria(NuevoExamen.materia)})");
                 }
-                Examenes.listaExamenes.Add(NuevoExamen);
-                DateTime dateOnly = NuevoExamen.fecha.Date;
-                lb_Examenes.Items.Add($"{NuevoExamen.GetNombre()} {dateOnly.ToString("d")} ({Materias.BuscarMateria(NuevoExamen.materia)})");
+                //Sql.InsertarExamen(NuevoExamen);
                 
                 //Barrido de viejos datos
                 txt_NombreExamen.Text = "";
@@ -70,32 +70,33 @@ namespace SysAcademy
             lb_Examenes.Items.Clear();
             cb_Materia.Items.Clear();
 
-            Usuario ActiveUser = Usuarios.BuscarActivo();
-            foreach(var materias in Materias.listaMaterias)
+            Usuario? ActiveUser = SqlUsuario.ObtenerUsuarioActivo();
+            if(ActiveUser != null)
             {
-                if(materias.GetProfesorAsignado() == ActiveUser.GetID())
+                foreach (var materias in Sql.ObtenerTodasLasMaterias())
                 {
-                    cb_Materia.Items.Add(materias.GetNombre());
+                    if(materias.GetProfesorAsignado() == ActiveUser.GetID())
+                    {
+                        cb_Materia.Items.Add(materias.GetNombre());
+                    }
+                }
+                Materia materiaTemp = new();
+                foreach(var materia in Sql.ObtenerTodasLasMaterias())
+                {
+                    if(materia.GetProfesorAsignado() == ActiveUser.GetID())
+                    {
+                        materiaTemp = materia;
+                        break;
+                    }
+                }
+                foreach (var examen in Sql.ObtenerTodosLosExamenes())
+                {
+                    if (ActiveUser.GetID() == materiaTemp.GetProfesorAsignado() && materiaTemp.GetID() == examen.materia)
+                    {
+                        lb_Examenes.Items.Add($"{examen.GetNombre()} {examen.fecha.ToShortDateString()} ({SqlMateria.ObtenerMateria("id",examen.materia).GetNombre()})");
+                    }
                 }
             }
-            Materia materiaTemp = new();
-            foreach(var materia in Materias.listaMaterias)
-            {
-                if(materia.GetProfesorAsignado() == ActiveUser.GetID())
-                {
-                    materiaTemp = materia;
-                    break;
-                }
-            }
-            foreach (var examen in Examenes.listaExamenes)
-            {
-                if (ActiveUser.GetID() == materiaTemp.GetProfesorAsignado() && materiaTemp.GetID() == examen.materia)
-                {
-                    DateTime dateOnly = examen.fecha.Date;
-                    lb_Examenes.Items.Add($"{examen.GetNombre()} {dateOnly} ({Materias.BuscarMateria(examen.materia)})");
-                }
-            }
-
         }
 
         private void Docentes_Shown(object sender, EventArgs e)

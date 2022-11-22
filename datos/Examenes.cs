@@ -13,37 +13,38 @@ namespace datos
         //ID EXAMEN / NOTA EXAMEN
         public static List<Notas> NotasExamenes = new();
 
-        public static List<Alumno> FiltroAlumnEnExamen(List<Alumno> listaAlumnos)
-        {
-            List<Alumno> listaARetornar = new List<Alumno>();
-            foreach (var alumno in listaAlumnos)
-            {
-                foreach(var examen in listaExamenes)
-                {
-                    foreach (var fecha in Materias.BuscarAsistencia(alumno.GetID()))
-                    {
-                        if (fecha == examen.fecha && (examen.materia == alumno.materiaA || examen.materia == alumno.materiaB)){
-                            listaARetornar.Add(alumno);
-                        }
+        //public static List<Alumno> FiltroAlumnEnExamen(List<Alumno> listaAlumnos)
+        //{
+        //    //sql obtencion
+        //    List<Alumno> listaARetornar = new List<Alumno>();
+        //    foreach (var alumno in listaAlumnos)
+        //    {
+        //        foreach(var examen in listaExamenes)
+        //        {
+        //            foreach (var fecha in Materias.BuscarAsistencia(alumno.GetID()))
+        //            {
+        //                if (fecha == examen.fecha && (examen.materia == alumno.materiaA || examen.materia == alumno.materiaB)){
+        //                    listaARetornar.Add(alumno);
+        //                }
 
-                    }
+        //            }
 
-                }            
-            }
-            return listaARetornar;
-            /*
-            Alumno                     
-                fecha de asistencia
-                                    ==> examen asigna alumnoID
-            examen                              
-                fecha de realizacion   
+        //        }            
+        //    }
+        //    return listaARetornar;
+        //    /*
+        //    Alumno                     
+        //        fecha de asistencia
+        //                            ==> examen asigna alumnoID
+        //    examen                              
+        //        fecha de realizacion   
 
 
-            ID del examen diccionario
-                                    ==> conexion del Examen con su nota
-            examen ID
-             */            
-        }
+        //    ID del examen diccionario
+        //                            ==> conexion del Examen con su nota
+        //    examen ID
+        //     */            
+        //}
         public static int IdIncremental(List<Examen> lista)
         {
             if (lista.Count == 0)

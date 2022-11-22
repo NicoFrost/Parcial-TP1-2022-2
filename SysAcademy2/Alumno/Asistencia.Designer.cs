@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Asistencia));
             this.FCal_diaAsistencia = new System.Windows.Forms.MonthCalendar();
             this.btn_Aceptar = new System.Windows.Forms.Button();
+            this.cbox_materia = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // FCal_diaAsistencia
@@ -43,7 +44,7 @@
             // 
             // btn_Aceptar
             // 
-            this.btn_Aceptar.Location = new System.Drawing.Point(200, 197);
+            this.btn_Aceptar.Location = new System.Drawing.Point(182, 197);
             this.btn_Aceptar.MaximumSize = new System.Drawing.Size(95, 23);
             this.btn_Aceptar.MinimumSize = new System.Drawing.Size(95, 23);
             this.btn_Aceptar.Name = "btn_Aceptar";
@@ -53,6 +54,15 @@
             this.btn_Aceptar.UseVisualStyleBackColor = true;
             this.btn_Aceptar.Click += new System.EventHandler(this.btn_cancel_Click);
             // 
+            // cbox_materia
+            // 
+            this.cbox_materia.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.cbox_materia.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbox_materia.Location = new System.Drawing.Point(29, 197);
+            this.cbox_materia.Name = "cbox_materia";
+            this.cbox_materia.Size = new System.Drawing.Size(121, 23);
+            this.cbox_materia.TabIndex = 5;
+            // 
             // Asistencia
             // 
             this.AcceptButton = this.btn_Aceptar;
@@ -60,6 +70,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(307, 232);
+            this.Controls.Add(this.cbox_materia);
             this.Controls.Add(this.btn_Aceptar);
             this.Controls.Add(this.FCal_diaAsistencia);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -67,6 +78,7 @@
             this.MinimumSize = new System.Drawing.Size(323, 271);
             this.Name = "Asistencia";
             this.Text = "Seleccionar fechca de asistencia";
+            this.Load += new System.EventHandler(this.Asistencia_Load);
             this.ResumeLayout(false);
 
         }
@@ -76,5 +88,6 @@
         private MonthCalendar FCal_diaAsistencia;
         private Button btn_cancel;
         private Button btn_Aceptar;
+        private ComboBox cbox_materia;
     }
 }

@@ -27,9 +27,15 @@ namespace SysAcademy2
             lbl_Profesor.Text = "";
             lbl_Materia.Text = "";
             lb_Examenes.Items.Clear();
-            foreach (var examen in Examenes.listaExamenes)
+            Usuario activo = SqlUsuario.ObtenerUsuarioActivo();
+            var Lista = Sql.ObtenerTodosLosExamenes();
+            foreach (var examen in Lista)
             {
-                lb_Examenes.Items.Add(examen.GetNombre());
+                Materia? materia = SqlMateria.ObtenerMateria("id",examen.materia);
+                if(materia != null && materia.GetProfesorAsignado() == activo.GetID())
+                {
+                    lb_Examenes.Items.Add(examen.GetNombre());
+                }
             }
         }
 
@@ -38,16 +44,19 @@ namespace SysAcademy2
             if(lb_Examenes.SelectedItem != null)
             {
                 string examenSel = lb_Examenes.SelectedItem.ToString();
-                foreach (var examen in Examenes.listaExamenes)
+                foreach (var examen in Sql.ObtenerTodosLosExamenes())
                 {
                     if (examen.GetNombre() == examenSel)
                     {
-                        Materia materia = Materias.MateriafromList(examen.materia);
-                        Usuario profesor = Usuarios.UsuariofromList(materia.GetProfesorAsignado());
-                        lbl_Nombre.Text = examen.GetNombre();
-                        lbl_Fecha.Text = examen.fecha.Date.ToString();
-                        lbl_Profesor.Text = profesor.GetNombre();
-                        lbl_Materia.Text = materia.GetNombre();
+                        Materia? materia = SqlMateria.ObtenerMateria("id",examen.materia);
+                        if(materia != null)
+                        {
+                            Usuario profesor = SqlUsuario.ObtenerUsuario(materia.GetProfesorAsignado());
+                            lbl_Nombre.Text = examen.GetNombre();
+                            lbl_Fecha.Text = examen.fecha.Date.ToString();
+                            lbl_Profesor.Text = profesor.GetNombre();
+                            lbl_Materia.Text = materia.GetNombre();
+                        }
                     }
                 }
                 
@@ -58,6 +67,10 @@ namespace SysAcademy2
         private void btn_Revisar_Click(object sender, EventArgs e)
         {
             ExamenRevisar FrmRevisar = new();
+            if(lb_Examenes.SelectedItem != null)
+            {
+                FrmRevisar.examen = Sql.ObtenerExamen(lb_Examenes.SelectedItem.ToString());
+            }
             FrmRevisar.Show();
         }
 

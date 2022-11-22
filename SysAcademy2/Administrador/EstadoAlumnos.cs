@@ -24,7 +24,7 @@ namespace SysAcademy2
         {
             lb_Alumnos.Items.Clear();
             lb_materias.Items.Clear();
-            foreach (var materia in Materias.listaMaterias)
+            foreach (var materia in Sql.ObtenerTodasLasMaterias())
             {
                 lb_materias.Items.Add(materia.GetNombre());
             }
@@ -33,31 +33,68 @@ namespace SysAcademy2
         private void lb_materias_SelectedIndexChanged(object sender, EventArgs e)
         {
             lb_Alumnos.Items.Clear();
-            Materia materia = Materias.listaMaterias.Find(objecto => objecto.GetNombre() == lb_materias.SelectedItem.ToString());
-            if (materia != null)
+            if(lb_materias.SelectedIndex != null)
             {
-                List<Alumno> alumnos = Usuarios.listaAlumnos.FindAll(objeto => objeto.materiaA == materia.GetID() || objeto.materiaB == materia.GetID());
-                foreach(var alumno in alumnos)
+                Materia materia = SqlMateria.ObtenerMateria(lb_materias.SelectedItem.ToString());
+              //Materia materia = Materias.listaMaterias.Find(objecto => objecto.GetNombre() == lb_materias.SelectedItem.ToString());
+                if (materia != null)
                 {
-                    if (!lb_Alumnos.Items.Contains(alumno.GetNombre())){
-                        lb_Alumnos.Items.Add(alumno.GetNombre());
+                    List<Alumno>? alumnos = SqlAlumnos.AlumnosAnotados(materia);
+                    //List<Alumno> alumnos = Usuarios.listaAlumnos.FindAll(objeto => objeto.materiaA == materia.GetID() || objeto.materiaB == materia.GetID());
+                    if(alumnos != null)
+                    {
+                        foreach (var alumno in alumnos)
+                        {
+                            if (!lb_Alumnos.Items.Contains(alumno.GetNombre())){
+                                lb_Alumnos.Items.Add(alumno.GetNombre());
+                            }
+                        }
                     }
-                }
                 
+                }
+                rbtn_Regular.Checked = false;
+                rbtn_Libre.Checked = false;
             }
         }
 
         private void btn_Modify_Click(object sender, EventArgs e)
         {
-            Materia materia = Materias.listaMaterias.Find(objeto => objeto.GetNombre() == lb_materias.SelectedItem.ToString());
-            Alumno alumno = Usuarios.listaAlumnos.Find(objeto => objeto.GetNombre() == lb_Alumnos.SelectedItem.ToString());
-            if (rbtn_Libre.Checked)
+            Materia materia = SqlMateria.ObtenerMateria(lb_materias.SelectedItem.ToString());
+            Alumno alumno = SqlAlumnos.ObtenerAlumno(lb_Alumnos.SelectedItem.ToString(),materia.GetID());
+            if (materia != null && alumno != null && (rbtn_Libre.Checked || rbtn_Regular.Checked))
             {
-                Alumno.SetEstadoMateria(materia, alumno, false);
+                if (rbtn_Libre.Checked)
+                {
+                    SqlAlumnos.ActualizarAlumno(alumno.GetID(), materia.GetID(), 0);
+                    //Alumno.SetEstadoMateria(materia, alumno, false);
+                }
+                if (rbtn_Regular.Checked)
+                {
+                    SqlAlumnos.ActualizarAlumno(alumno.GetID(), materia.GetID(), 1);
+                    //Alumno.SetEstadoMateria(materia, alumno, true);
+                }
+            } else
+            {
+                MessageBox.Show("No se selecciono estado del alumno");
             }
-            if (rbtn_Regular.Checked)
+        }
+
+        private void lb_Alumnos_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lb_Alumnos.SelectedItem != null)
             {
-                Alumno.SetEstadoMateria(materia, alumno, true);
+                Materia? materia = SqlMateria.ObtenerMateria(lb_materias.SelectedItem.ToString());
+                Alumno? alumno = SqlAlumnos.ObtenerAlumno(lb_Alumnos.SelectedItem.ToString(), materia.GetID());
+                if (alumno != null)
+                {
+                    if(alumno.estadoMA)
+                    {
+                        rbtn_Regular.Checked = true;
+                    } else
+                    {
+                        rbtn_Libre.Checked = true;
+                    }
+                }
             }
         }
     }

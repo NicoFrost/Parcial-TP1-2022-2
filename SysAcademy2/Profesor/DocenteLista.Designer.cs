@@ -183,8 +183,6 @@
         }
 
         #endregion
-
-        private ListBox lb_Examenes;
         private Label label1;
         private Label label4;
         private Label lbl_Fecha;
@@ -195,5 +193,6 @@
         private Label lbl_Profesor;
         private Label label3;
         private Label lbl_Materia;
+        public ListBox lb_Examenes;
     }
 }

@@ -11,130 +11,114 @@ namespace datos
 {
     public class HardData
     {
+
         public static void InicializarDatos()
         {
             {
-            Usuario administradorRoot = new Usuario();
-            administradorRoot.SetID(0);
-            administradorRoot.SetNombre("Administrador");
-            administradorRoot.SetPassword("admin");
-            administradorRoot.SetPerfil("Admin");
-            DU.listaUsuarios.Add(administradorRoot);
-            Usuario Alumno1 = new Usuario();
-            Alumno1.SetID(1);
-            Alumno1.SetNombre("Adrian");
-            Alumno1.SetPassword("river el fachero");
-            Alumno1.SetPerfil("Alumno");
-            DU.listaUsuarios.Add(Alumno1);
-            Usuario Alumno2 = new Usuario();
-            Alumno2.SetID(2);
-            Alumno2.SetNombre("Dario");
-            Alumno2.SetPassword("BocaEl+Grande");
-            Alumno2.SetPerfil("Alumno");
-            DU.listaUsuarios.Add(Alumno2);
-            Usuario Profe1 = new Usuario();
-            Profe1.SetID(3);
-            Profe1.SetNombre("Martin");
-            Profe1.SetPassword("luciano2002");
-            Profe1.SetPerfil("Profesor");
-            DU.listaUsuarios.Add(Profe1);
-            Usuario Profe2 = new Usuario();
-            Profe2.SetID(4);
-            Profe2.SetNombre("Lucas");
-            Profe2.SetPassword("Boquita");
-            Profe2.SetPerfil("Profesor");
-            DU.listaUsuarios.Add(Profe2);
+            DU.listaUsuarios = Sql.ObtenerTodosLosUsuarios();
+            //Usuario administradorRoot = new Usuario(0,"Administrador", "admin", "Admin");
+            //Usuario Alumno1 = new Usuario(1, "Adrian","river el fachero","Alumno");
+            //Usuario Profe2 = new Usuario(4, "Lucas","Boquita", "Profesor");
+            //Usuario Alumno2 = new Usuario(2, "Dario", "BocaEl+Grande","Alumno");
+            //Usuario Profe1 = new Usuario(3, "Martin", "luciano2002", "Profesor");
+            //DU.listaUsuarios.Add(administradorRoot);
+            //DU.listaUsuarios.Add(Alumno1);
+            //DU.listaUsuarios.Add(Alumno2);
+            //DU.listaUsuarios.Add(Profe1);
+            //DU.listaUsuarios.Add(Profe2);
             }
             // permisos prestablecidos
             //Administradores
+            DF.listaFunciones = Sql.ObtenerTodasLasFunciones();
             {
-                Funcion AltaUsuarios = new Funcion();
-                Funcion EstadoMateria = new Funcion();
-                Funcion CrearMaterias = new Funcion();
-                Funcion AsignarProfeMateria = new Funcion();
+            //    Funcion AltaUsuarios = new Funcion();
+            //    Funcion EstadoMateria = new Funcion();
+            //    Funcion CrearMaterias = new Funcion();
+            //    Funcion AsignarProfeMateria = new Funcion();
 
-                AltaUsuarios.SetID(0);
-                AltaUsuarios.SetNombre("Nuevo Usuario");
-                AltaUsuarios.SetPermiso("Admin");
+            //    AltaUsuarios.SetID(0);
+            //    AltaUsuarios.SetNombre("Nuevo Usuario");
+            //    AltaUsuarios.SetPermiso("Admin");
 
-                EstadoMateria.SetID(1);
-                EstadoMateria.SetNombre("Estado materia para alumnos"); //(regular/libre)
-                EstadoMateria.SetPermiso("Admin");
+            //    EstadoMateria.SetID(1);
+            //    EstadoMateria.SetNombre("Estado materia para alumnos"); //(regular/libre)
+            //    EstadoMateria.SetPermiso("Admin");
 
-                CrearMaterias.SetID(2);
-                CrearMaterias.SetNombre("Nueva Materia");
-                CrearMaterias.SetPermiso("Admin");
+            //    CrearMaterias.SetID(2);
+            //    CrearMaterias.SetNombre("Nueva Materia");
+            //    CrearMaterias.SetPermiso("Admin");
 
-                AsignarProfeMateria.SetID(3);
-                AsignarProfeMateria.SetNombre("Asignacion Profes");
-                AsignarProfeMateria.SetPermiso("Admin");
+            //    AsignarProfeMateria.SetID(3);
+            //    AsignarProfeMateria.SetNombre("Asignacion Profes");
+            //    AsignarProfeMateria.SetPermiso("Admin");
 
-                DF.listaFunciones.Add(AltaUsuarios);
-                DF.listaFunciones.Add(EstadoMateria);
-                DF.listaFunciones.Add(CrearMaterias);
-                DF.listaFunciones.Add(AsignarProfeMateria);
+            //    DF.listaFunciones.Add(AltaUsuarios);
+            //    DF.listaFunciones.Add(EstadoMateria);
+            //    DF.listaFunciones.Add(CrearMaterias);
+            //    DF.listaFunciones.Add(AsignarProfeMateria);
 
+            //}
+            ////Profesores
+            //{
+            //    Funcion CrearExamenes = new Funcion();
+            //    Funcion PonerNotas = new Funcion();
+
+            //    CrearExamenes.SetID(4);
+            //    CrearExamenes.SetNombre("Crear"); // nombre y fecha
+            //    CrearExamenes.SetPermiso("Profesor");
+
+            //    PonerNotas.SetID(5);
+            //    PonerNotas.SetNombre("Lista");
+            //    PonerNotas.SetPermiso("Profesor");
+
+            //    DF.listaFunciones.Add(CrearExamenes);
+            //    DF.listaFunciones.Add(PonerNotas);
+            //}
+            ////Alumnos
+            //{
+            //    Funcion Inscribirse = new Funcion();
+            //    Funcion Asistencia = new Funcion();
+
+            //    Inscribirse.SetID(6);
+            //    Inscribirse.SetNombre("Inscribirse a materias");
+            //    Inscribirse.SetPermiso("Alumno");
+
+            //    Asistencia.SetID(7);
+            //    Asistencia.SetNombre("Dar Asistencia a materias");
+            //    Asistencia.SetPermiso("Alumno");
+            //    DF.listaFunciones.Add(Inscribirse);
+            //    DF.listaFunciones.Add(Asistencia);
             }
-            //Profesores
+
+            // 
             {
-                Funcion CrearExamenes = new Funcion();
-                Funcion PonerNotas = new Funcion();
-
-                CrearExamenes.SetID(4);
-                CrearExamenes.SetNombre("Crear"); // nombre y fecha
-                CrearExamenes.SetPermiso("Profesor");
-
-                PonerNotas.SetID(5);
-                PonerNotas.SetNombre("Lista");
-                PonerNotas.SetPermiso("Profesor");
-
-                DF.listaFunciones.Add(CrearExamenes);
-                DF.listaFunciones.Add(PonerNotas);
-            }
-            //Alumnos
-            {
-                Funcion Inscribirse = new Funcion();
-                Funcion Asistencia = new Funcion();
-
-                Inscribirse.SetID(6);
-                Inscribirse.SetNombre("Inscribirse a materias");
-                Inscribirse.SetPermiso("Alumno");
-
-                Asistencia.SetID(7);
-                Asistencia.SetNombre("Dar Asistencia a materias");
-                Asistencia.SetPermiso("Alumno");
-                DF.listaFunciones.Add(Inscribirse);
-                DF.listaFunciones.Add(Asistencia);
-            }
-
-            //
-            {
-                Materia materia = new();
-                materia.SetID(0);
-                materia.SetNombre("matematica");
-                Materias.listaMaterias.Add(materia);
-                Materia materia2 = new();
-                materia2.SetID(1);
-                materia2.SetNombre("lengua");
-                Materias.listaMaterias.Add(materia2);
-                Materia materia3 = new();
-                materia3.SetID(2);
-                materia3.SetNombre("Ingenieria");
-                Materias.listaMaterias.Add(materia3);
-                Materia materia4 = new();
-                materia4.SetID(3);
-                materia4.SetNombre("Matermatica II");
-                Materia materiaTemp = Materias.listaMaterias.Find(objeto => objeto.GetID() == 0);
-                if(materiaTemp != null)
-                {
-                    materia4.correlativas.Add(materiaTemp);
-                }
-                materiaTemp = Materias.listaMaterias.Find(objeto => objeto.GetID() == 2);
-                if(materiaTemp != null)
-                {
-                    materia4.correlativas.Add(materiaTemp);
-                }
-                Materias.listaMaterias.Add(materia4);
+                Materias.listaMaterias = Sql.ObtenerTodasLasMaterias();
+                //Materia materia = new();
+                //materia.SetID(0);
+                //materia.SetNombre("matematica");
+                //Materias.listaMaterias.Add(materia);
+                //Materia materia2 = new();
+                //materia2.SetID(1);
+                //materia2.SetNombre("lengua");
+                //Materias.listaMaterias.Add(materia2);
+                //Materia materia3 = new();
+                //materia3.SetID(2);
+                //materia3.SetNombre("Ingenieria");
+                //Materias.listaMaterias.Add(materia3);
+                //Materia materia4 = new();
+                //materia4.SetID(3);
+                //materia4.SetNombre("Matermatica II");
+                //Materia materiaTemp = Materias.listaMaterias.Find(objeto => objeto.GetID() == 0);
+                //if(materiaTemp != null)
+                //{
+                //    materia4.correlativas.Add(materiaTemp);
+                //}
+                //materiaTemp = Materias.listaMaterias.Find(objeto => objeto.GetID() == 2);
+                //if(materiaTemp != null)
+                //{
+                //    materia4.correlativas.Add(materiaTemp);
+                //}
+                //Materias.listaMaterias.Add(materia4);
             }
 
             UsuarioPermisos.GuardarPermiso(DU.listaUsuarios, DF.listaFunciones);

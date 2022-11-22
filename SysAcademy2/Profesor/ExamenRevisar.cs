@@ -15,6 +15,7 @@ namespace SysAcademy2
 {
     public partial class ExamenRevisar : Form
     {
+        private Usuario? usuarioActivo = SqlUsuario.ObtenerUsuarioActivo();
         public ExamenRevisar()
         {
             InitializeComponent();
@@ -42,7 +43,7 @@ namespace SysAcademy2
             //Add the width and height to the picture box dimensions
             pictureBox1.Width += widthZoom;
             pictureBox1.Height += heightZoom;
-
+            
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -54,17 +55,29 @@ namespace SysAcademy2
         {
         }
 
+        public Examen examen = new();
         private void ExamenRevisar_Load(object sender, EventArgs e)
         {
             lbox_Alumnos.Items.Clear();
-            var listaAlumnos = Examenes.FiltroAlumnEnExamen(D.listaAlumnos);
-            foreach(var alumno in listaAlumnos)
+            //examenes particulares
+            List<int> lista = Sql.ObtenerExamenesID(examen.GetID());
+            List<Materia>? materias = SqlMateria.ObtenerMaterias("idUserP_Asignado",usuarioActivo.GetID());
+            foreach (var alumnoID in lista)
             {
-                int profesorID = D.BuscarActivo().GetID();
-                if (Materias.MateriafromList(alumno.materiaA).GetProfesorAsignado() == profesorID || Materias.MateriafromList(alumno.materiaB).GetProfesorAsignado() == profesorID)
+                foreach(var materia in materias)
                 {
-                    lbox_Alumnos.Items.Add(alumno.GetNombre());
+                    string nombre = SqlAlumnos.ObtenerAlumno(alumnoID).GetNombre();
+                    Alumno? alumno = SqlAlumnos.ObtenerAlumno(nombre, materia.GetID());
+                
+                    if(alumno != null && usuarioActivo != null && materia != null && alumno.materiaA == materia.GetID())
+                    {
+                        lbox_Alumnos.Items.Add(alumno.GetNombre());
+                    }
                 }
+                //Materia materia = SqlMateria.ObtenerMateria(alumno.materiaA);
+                //int profesorID = SqlUsuario.ObtenerUsuarioActivo().GetID();
+                //if(SqlMateria.ObtenerMateria(alumno.materiaA).GetProfesorAsignado() == profesorID)
+                //if (Materias.MateriafromList(alumno.materiaA).GetProfesorAsignado() == profesorID || Materias.MateriafromList(alumno.materiaB).GetProfesorAsignado() == profesorID)
             }            
                 //foreach (var examenSel in Examenes.listaExamenes)
                 //{
@@ -86,16 +99,39 @@ namespace SysAcademy2
 
         private void btn_confirm_Click(object sender, EventArgs e)
         {
-            Usuario profesor = D.BuscarActivo();
-            int idAlumno = D.BuscarUsuario(lbox_Alumnos.Text);
-            Materia materiaSel = Materias.listaMaterias.Find(objeto => objeto.GetProfesorAsignado() == profesor.GetID());
-            int idExamen = Examenes.listaExamenes.Find(objeto => objeto.materia == materiaSel.GetID()).GetID();
+            decimal nota = nSel_NotaExamen.Value;
+            Materia? materia = SqlMateria.ObtenerMateria("id",examen.materia);
+            if(lbox_Alumnos.SelectedItem != null && materia != null)
+            {
+                Alumno? alumno = SqlAlumnos.ObtenerAlumno(lbox_Alumnos.SelectedItem.ToString(),materia.GetID());
+                if(alumno != null)
+                {
+                    Sql.ActualizarExamenesAlumnos(alumno.GetID(),examen.GetID(),nota);
+                }
+
+                if(Sql.ObtenerNota(alumno.GetID(),examen.GetID()).GetNotaExamen() == nota)
+                {
+                    MessageBox.Show("Nota guardada " + nota);
+                }
+
+            }
+
+            /*
+            Usuario profesor = SqlUsuario.ObtenerUsuarioActivo();
+            Alumno alumno = SqlAlumnos.ObtenerAlumno(lbox_Alumnos.Text, materiaSel.GetID());
+            Materia materiaSel = SqlMateria.ObtenerMateria(alumno.materiaA);
+            //Materia materiaSel = Materias.listaMaterias.Find(objeto => objeto.GetProfesorAsignado() == profesor.GetID());
+            Examen examen = Sql.ObtenerExamenIDAlumno(alumno.GetID());
+            //int idExamen = Examenes.listaExamenes.Find(objeto => objeto.materia == materiaSel.GetID()).GetID();
+
             decimal notaExamen = nSel_NotaExamen.Value;
             Notas nota = new();
-            nota.SetAlumnoID(idAlumno);
-            nota.SetExamenId(idExamen);
+            nota.SetAlumnoID(alumno.GetID());
+            nota.SetExamenId(examen.GetID());
             nota.SetNotaExamen(notaExamen);
-            Examenes.NotasExamenes.Add(nota);
+            Sql.ActualizarExamenesAlumnos(alumno.GetID(),nota);
+            //Examenes.NotasExamenes.Add(nota);
+            */
         }
     }
 }

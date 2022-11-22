@@ -73,6 +73,7 @@
             this.lb_Alumnos.Name = "lb_Alumnos";
             this.lb_Alumnos.Size = new System.Drawing.Size(422, 169);
             this.lb_Alumnos.TabIndex = 3;
+            this.lb_Alumnos.SelectedIndexChanged += new System.EventHandler(this.lb_Alumnos_SelectedIndexChanged);
             // 
             // lb_materias
             // 

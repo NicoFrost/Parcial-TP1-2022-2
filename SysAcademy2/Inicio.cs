@@ -28,17 +28,20 @@ namespace SysAcademy
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            Usuario usuario = new Usuario();
+            Usuario usuario = new();
 
             if(D.listaUsuarios.Count > 0)
             {
-//                usuario = D.listaUsuarios.Find(x => x.nombre.Contains(txt_name.Text));
-                usuario = D.listaUsuarios.Find(objeto => objeto.GetNombre().Contains(txt_name.Text));
-                int i = D.listaUsuarios.FindIndex(x => x.GetNombre().Contains(txt_name.Text));
+                //                usuario = D.listaUsuarios.Find(x => x.nombre.Contains(txt_name.Text));
+                usuario = SqlUsuario.ObtenerUsuario(txt_name.Text);
+                
+                //usuario = D.listaUsuarios.Find(objeto => objeto.GetNombre().Contains(txt_name.Text));
+                //int i = D.listaUsuarios.FindIndex(x => x.GetNombre().Contains(txt_name.Text));
                 if (usuario != null && usuario.GetPassword() == txt_password.Text)
                 {
                     Inicio inicioSesion = new Inicio();
-                    D.listaUsuarios[i].activo = true;
+                    SqlUsuario.ActualizarUsuario(usuario,"activo",1);
+                    usuario.activo = true;
                     Main ventanaPrincipal = new Main();
                     txt_name.Text = "";
                     txt_password.Text = "";
@@ -60,14 +63,12 @@ namespace SysAcademy
 
         private void Inicio_Activated(object sender, EventArgs e)
         {
-            int index = D.BuscarActivoIndex(D.listaUsuarios);
-            if (index != -1 && D.listaUsuarios[index].activo == true)
+            Usuario? usuario = SqlUsuario.ObtenerUsuarioActivo();
+//          int index = D.BuscarActivoIndex(D.listaUsuarios);
+            if (usuario != null)
             {
-                D.listaUsuarios[index].activo = false;   
-            }
-            else 
-            {
-
+                SqlUsuario.ActualizarUsuario(usuario,"activo",0);
+                //D.listaUsuarios[index].activo = false;   
             }
         }
 

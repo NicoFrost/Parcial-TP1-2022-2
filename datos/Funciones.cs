@@ -10,7 +10,6 @@ namespace datos
     public class Funciones
     {
         public static List<Funcion> listaFunciones = new List<Funcion>();
-    
 
     }
 }

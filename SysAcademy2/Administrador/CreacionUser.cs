@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using datos;
 using Entidades;
 using D = datos.Usuarios;
 
@@ -22,7 +23,7 @@ namespace SysAcademy
         private void btn_Create_Click(object sender, EventArgs e)
         {
             Usuario usuario = new Usuario();
-            usuario.SetID(D.IdIncremental(D.listaUsuarios));
+            usuario.SetID(Sql.GetLastID("Usuario") + 1);
             usuario.SetNombre(txtB_User.Text);
             usuario.SetPassword(txtB_Password.Text);
             if (rb_Admin.Checked)
@@ -30,13 +31,14 @@ namespace SysAcademy
                 usuario.SetPerfil("Admin");
             } else if (rb_Profesor.Checked)
             {
-                usuario.SetPerfil("Profe");
+                usuario.SetPerfil("Profesor");
             } else if (rb_Alumno.Checked)
             { 
                 usuario.SetPerfil("Alumno");
             }
-            D.AgregarUsuario(usuario, D.listaUsuarios);
-            MessageBox.Show($"Has creado y metido el usuario: Nombre:{usuario.GetNombre()} Pass: {usuario.GetPassword()} y con acceso de {usuario.GetPerfil()}",$"{usuario.GetID()}");
+            SqlUsuario.InsertarUsuario(usuario);
+            Usuario userVerif = SqlUsuario.ObtenerUsuario(txtB_User.Text);
+            MessageBox.Show($"Has creado y metido el usuario: Nombre:{userVerif.GetNombre()} Pass: {userVerif.GetPassword()} y con acceso de {userVerif.GetPerfil()}",$"{usuario.GetID()}");
             Close(); 
         }
 

@@ -9,7 +9,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using M = datos.Materias;
 
 namespace SysAcademy2
 {
@@ -25,14 +24,15 @@ namespace SysAcademy2
             Cbx_Profesores.Items.Clear();
             cb_correlativas.Items.Clear();
             lb_correlativasAdded.Items.Clear();
-            foreach(var Usuarios in Usuarios.listaUsuarios)
+            foreach(var Usuarios in Sql.ObtenerTodosLosUsuarios())
             {
                 if(Usuarios.GetPerfil() == "Profesor")
                 {
                     Cbx_Profesores.Items.Add(Usuarios.GetNombre());
                 }
             }
-            foreach(var materia in Materias.listaMaterias)
+            Cbx_Profesores.Items.Add("Ninguno");
+            foreach (var materia in Sql.ObtenerTodasLasMaterias())
             {
                 cb_correlativas.Items.Add(materia.GetNombre());
             }
@@ -46,7 +46,15 @@ namespace SysAcademy2
                 materia.SetNombre(txt_Nombre.Text);
                 if(Cbx_Profesores.SelectedItem != null)
                 {
-                    materia.SetProfesorAsignado(Usuarios.BuscarUsuario(Cbx_Profesores.SelectedItem.ToString()));
+                    if(Cbx_Profesores.SelectedItem.ToString() == "Ninguno")
+                    {
+                        materia.SetProfesorAsignado(-1);
+                    } else
+                    {
+                        var usuario = SqlUsuario.ObtenerUsuario(Cbx_Profesores.SelectedItem.ToString());
+                        materia.SetProfesorAsignado(usuario.GetID());
+                        materia.SetProfesorAsignado(Usuarios.BuscarUsuario(Cbx_Profesores.SelectedItem.ToString()));
+                    }
                 }
                 else
                 {
@@ -56,7 +64,7 @@ namespace SysAcademy2
                 for(int i = 0;i < lb_correlativasAdded.Items.Count; i++)
                 {
                     var item = lb_correlativasAdded.Items[i].ToString();
-                    foreach(var materiaIN in M.listaMaterias)
+                    foreach(var materiaIN in Sql.ObtenerTodasLasMaterias())
                     {
                         if(item == materiaIN.GetNombre())
                         {
@@ -67,8 +75,14 @@ namespace SysAcademy2
                         }
                     }
                 }
-                materia.SetID(materia.IdIncremental(M.listaMaterias));
-                M.listaMaterias.Add(materia);
+                //materia.SetID(materia.IdIncremental(M.listaMaterias));
+                materia.SetID(Sql.GetLastID("Materia") + 1);
+                //M.listaMaterias.Add(materia);
+                SqlMateria.InsertarMateria(materia);
+                foreach(var correlativa in materia.correlativas)
+                {
+                    SqlMateria.InsertarCorrelativa(materia,correlativa);
+                }
                 MessageBox.Show($"Materia {materia.GetNombre()} creada");
                 Close();
             } else
@@ -92,7 +106,6 @@ namespace SysAcademy2
             if (cb_correlativas.SelectedItem != null)
             {
                 btn_AddCorrelativas.Enabled = true;
- 
             }
             else
             {
@@ -109,7 +122,6 @@ namespace SysAcademy2
                 cb_correlativas.Items.Remove(item);
                 cb_correlativas.Text = "";
                 btn_AddCorrelativas.Enabled = false;
-
             }
         }
 

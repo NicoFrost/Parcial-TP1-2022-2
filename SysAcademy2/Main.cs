@@ -18,7 +18,7 @@ namespace SysAcademy
 {
     public partial class Main : Form
     {   
-        public Usuario usuarioActivo = new Usuario();
+        public Usuario? usuarioActivo = SqlUsuario.ObtenerUsuarioActivo();
         public Main()
         {
             InitializeComponent();
@@ -49,21 +49,22 @@ namespace SysAcademy
 
         private void Main_Load(object sender, EventArgs e)
         {
-            usuarioActivo = D.listaUsuarios.Find(objecto => objecto.activo == true);
+//            usuarioActivo = Sql.ObtenerUsuarioActivo();
+//          usuarioActivo = D.listaUsuarios.Find(objecto => objecto.activo == true);
             string BienvenidoMsg = "Bienvenido, " + usuarioActivo.GetNombre();
             Mensaje.Text = BienvenidoMsg;
 
             //Busqueda de permisos
             { 
             //Admin
-            if (U.BuscarPermisos(estadosAlumnosToolStripMenuItem.Text, usuarioActivo.GetID())) {
+            if (Sql.VerificarPermisos(estadosAlumnosToolStripMenuItem.Text)) {
                 estadosAlumnosToolStripMenuItem.Enabled = true;
             }
-            if (U.BuscarPermisos(asignacionProfesToolStripMenuItem.Text, usuarioActivo.GetID()))
+            if (Sql.VerificarPermisos(asignacionProfesToolStripMenuItem.Text))
             {
                 asignacionProfesToolStripMenuItem.Enabled = true;
             }
-            if (U.BuscarPermisos(nuevaMateriaToolStripMenuItem.Text, usuarioActivo.GetID())) {
+            if (Sql.VerificarPermisos(nuevaMateriaToolStripMenuItem.Text)) {
                 nuevaMateriaToolStripMenuItem.Enabled = true;
 
             }
@@ -75,7 +76,7 @@ namespace SysAcademy
                 estadosMateriasToolStripMenuItem.Enabled = false;
             }
 
-            if (U.BuscarPermisos(nuevoUsuarioToolStripMenuItem.Text, usuarioActivo.GetID())) {
+            if (Sql.VerificarPermisos(nuevoUsuarioToolStripMenuItem.Text)) {
                 nuevoUsuarioToolStripMenuItem.Enabled = true;
             }
             if (nuevoUsuarioToolStripMenuItem.Enabled || estadosMateriasToolStripMenuItem.Enabled)
@@ -84,11 +85,11 @@ namespace SysAcademy
             }
 
             //Profes
-            if (U.BuscarPermisos(listaToolStripMenuItem1.Text, usuarioActivo.GetID()))
+            if (Sql.VerificarPermisos(listaToolStripMenuItem1.Text))
             {
                 listaToolStripMenuItem1.Enabled = true;
             }
-            if (U.BuscarPermisos(crearToolStripMenuItem.Text, usuarioActivo.GetID()))
+            if (Sql.VerificarPermisos(crearToolStripMenuItem.Text))
             {
                 crearToolStripMenuItem.Enabled = true;
             }
@@ -97,7 +98,7 @@ namespace SysAcademy
                 examenesToolStripMenuItem.Enabled = true;
             }
             //Alumno
-            if (U.BuscarPermisos("Inscribirse a materias", usuarioActivo.GetID()))
+            if (Sql.VerificarPermisos("Inscribirse a materias"))
             {
                 Image imagenInscripcion = Image.FromFile("E:\\2022 2do cuatri\\TP1\\Sol1\\img\\inscAct.png");
                 pb_Inscripcion.Enabled = true;
@@ -116,7 +117,7 @@ namespace SysAcademy
                 cbox_materia.Enabled = true;
                 
             }
-            if (U.BuscarPermisos("Dar Asistencia a materias", usuarioActivo.GetID()))
+            if (Sql.VerificarPermisos("Dar Asistencia a materias"))
             {
                 Image imagenAsistencia = Image.FromFile("E:\\2022 2do cuatri\\TP1\\Sol1\\img\\asisAct.jpg");
                 pb_asistencias.Enabled = true;
@@ -140,7 +141,8 @@ namespace SysAcademy
         {
             if(MessageBox.Show("Seguro quiere cerrar sesion?","info",MessageBoxButtons.OKCancel,MessageBoxIcon.Information) == DialogResult.OK)
             {
-                D.listaUsuarios[D.BuscarActivoIndex(D.listaUsuarios)].activo = false;   
+                SqlUsuario.ActualizarUsuario(usuarioActivo, "activo", 0);
+                //D.listaUsuarios[D.BuscarActivoIndex(D.listaUsuarios)].activo = false;   
                 Close();
             }           
         }
@@ -209,15 +211,15 @@ namespace SysAcademy
 
         private void pb_asistencias_Click(object sender, EventArgs e)
         {
-            if (cbox_materia.SelectedItem != null)
-            {
+            //if (cbox_materia.SelectedItem != null)
+            //{
                 Asistencia FrmAsistencia = new();
                 FrmAsistencia.Show();
-            } 
-            else 
-            {
-                MessageBox.Show("No se selecciono una materia", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            //} 
+            //else 
+            //{
+            //    MessageBox.Show("No se selecciono una materia", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //}
             //Da la asistencia a la materia que esta seleccionada, en caso de no estar seleccionada salta un Warning
         }
 
@@ -229,18 +231,37 @@ namespace SysAcademy
 
         private void Main_Activated(object sender, EventArgs e)
         {
-            Usuario activeUser = D.BuscarActivo();
-            Alumno alumno = D.AlumnofromList(activeUser.GetID());
-            if (alumno != null)
-            {
-                int idMateria = alumno.materiaA;
-                Materia materia = Materias.MateriafromList(idMateria);
-                if (idMateria != -1 && !cbox_materia.Items.Contains(materia.GetNombre()))
+            if (usuarioActivo != null) { 
+    //          Usuario activeUser = D.BuscarActivo();
+                Alumno? alumno = SqlAlumnos.ObtenerAlumno(usuarioActivo.GetID());
+                if (alumno != null)
                 {
-                    cbox_materia.Items.Add(materia.GetNombre());
+                    int idMateria = alumno.materiaA;
+                    Materia? materia = SqlMateria.ObtenerMateria("id",idMateria);
+                  //Materia materia = Materias.MateriafromList(idMateria);
+                    if (idMateria != -1 && !cbox_materia.Items.Contains(materia.GetNombre()))
+                    {
+                        cbox_materia.Items.Add(materia.GetNombre());
+                    }
+                }
+
+                //buscar Conexion entre Examen y Alumno Activo
+                if (usuarioActivo.GetPerfil() == "Alumno")
+                {
+                    List<Examen> Lista = Sql.ObtenerTodosLosExamenes();
+                    List<AsistenciaAlumno> ListaAsistencia = SqlAlumnos.ObtenerAsistencias("idAlumno", usuarioActivo.GetID());
+                    foreach (var examen in Lista)
+                    {
+                        foreach (var asistencia in ListaAsistencia)
+                        {
+                            if (examen.fecha == asistencia.fecha)
+                            {
+                                Sql.CrearExamenesAlumnos(asistencia.idAlumno,examen.GetID());
+                            }
+                        }
+                    }
                 }
             }
-            
         }
 
         private void Main_KeyDown(object sender, KeyEventArgs e)
@@ -257,7 +278,7 @@ namespace SysAcademy
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if(D.BuscarActivo().GetPerfil() == "Alumno")
+            if(usuarioActivo != null && usuarioActivo.GetPerfil() == "Alumno")
             {
                 MostrarDatos FrmMostrarDatos = new();
                 FrmMostrarDatos.Show();

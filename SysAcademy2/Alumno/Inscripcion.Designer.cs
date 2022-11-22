@@ -103,6 +103,7 @@
             this.lb_Correlativas.ItemHeight = 15;
             this.lb_Correlativas.Location = new System.Drawing.Point(242, 30);
             this.lb_Correlativas.Name = "lb_Correlativas";
+            this.lb_Correlativas.SelectionMode = System.Windows.Forms.SelectionMode.None;
             this.lb_Correlativas.Size = new System.Drawing.Size(120, 79);
             this.lb_Correlativas.TabIndex = 7;
             // 

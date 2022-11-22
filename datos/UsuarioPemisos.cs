@@ -76,7 +76,7 @@ namespace datos
             {
                 if ((oPermiso.idUsuario == oPermisoExp.idUsuario) && oPermiso.idFuncion == oPermisoExp.idFuncion)
                 {
-                    return true;
+                        return true;
                 }
             }
 
