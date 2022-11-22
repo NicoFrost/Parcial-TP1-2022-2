@@ -143,7 +143,7 @@ namespace Entidades
         private string? perfil;
         private int materiaA;
         private bool estadoMA;
-
+        private bool activo;
         public int Id
         {
             get
@@ -205,7 +205,19 @@ namespace Entidades
             }
         }
 
-        public AlumnoJSON(int id,string? nombre,string? password,string? perfil,int materiaA,bool estadoMA) : this()
+        public bool Activo
+        {
+            get
+            {
+                return activo;
+            }
+            set
+            {
+                activo = value;
+            }
+        }
+
+        public AlumnoJSON(int id,string? nombre,string? password,string? perfil,int materiaA,bool estadoMA,bool activo) : this()
         {
             this.id = id;
             this.nombre = nombre;
@@ -213,6 +225,7 @@ namespace Entidades
             this.perfil = perfil;
             this.materiaA = materiaA;
             this.estadoMA = estadoMA;
+            this.activo = activo;
         }
 
         public AlumnoJSON()

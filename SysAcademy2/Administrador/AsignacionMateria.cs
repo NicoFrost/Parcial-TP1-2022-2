@@ -99,33 +99,91 @@ namespace SysAcademy2
 
         private void btn_Exportar_Click(object sender, EventArgs e)
         {
-            if(listBox1.SelectedItem != null)
+            string path = "E:\\2022 2do cuatri\\TP1\\Sol1\\";
+            if (listBox1.SelectedItem != null)
             {
                 Materia materia = SqlMateria.ObtenerMateria(listBox1.SelectedItem.ToString());
                 if(materia != null)
                 {
                     List<Alumno>? alumnos = SqlAlumnos.AlumnosAnotados(materia);
-                    if(alumnos != null)
+                    if (alumnos != null)
                     {
                         string stringJson = "";
+                        string stringCSV = "id,nombre,password,perfil,materiaA,estadoMA,activo\n";
+                        DialogResult result = new();
+                        result = MessageBox.Show("JSON(Y) o CSV(N)?", "", MessageBoxButtons.YesNo);
                         foreach (var alumno in alumnos)
                         {
-                            AlumnoJSON alumnoJSON = new(alumno.GetID(),alumno.GetNombre(),alumno.GetPassword(),alumno.GetPerfil(),alumno.materiaA,alumno.estadoMA);
-                            stringJson = JsonSerializer.Serialize(alumnoJSON);
+                            AlumnoJSON alumnoJSON = new(alumno.GetID(), alumno.GetNombre(), alumno.GetPassword(), alumno.GetPerfil(), alumno.materiaA, alumno.estadoMA, alumno.activo);
+                            if (result == DialogResult.Yes)
+                            {
+                                stringJson = JsonSerializer.Serialize(alumnoJSON);
+                            } else
+                            {
+                                stringCSV += $"{alumnoJSON.Id},{alumnoJSON.Nombre},{alumnoJSON.Password},{alumnoJSON.Perfil},{alumnoJSON.MateriaA},{alumnoJSON.EstadoMA},{alumnoJSON.Activo}\n";
+                            }
                         }
-                        string path = "E:\\2022 2do cuatri\\TP1\\Sol1\\";
-                            if (File.Exists("Alumnos Exportados.json"))
+                        if (result == DialogResult.No)
+                        {
+                            if (File.Exists(path + "Alumnos Exportados.json"))
                             {
                                 var respuesta = MessageBox.Show("Advertencia el archivo ya fue exportado quiere sobrescribir?", "Archivo JSON", MessageBoxButtons.YesNo);
                                 if (DialogResult.Yes == respuesta)
                                 {
-                                    File.WriteAllText("Alumnos Exportados.json", stringJson);
+                                    try
+                                    {
+                                        File.WriteAllText(path + "Alumnos Exportados.csv", stringCSV);
+
+                                    }
+                                    catch (IOException)
+                                    {
+                                        MessageBox.Show("se esta usando el archivo desde otro lado, cierre la app y vuelva a intentar");
+                                    }
                                 }
-                            } else
-                            {
-                                File.WriteAllText("Alumnos Exportados.json", stringJson);
                             }
+                            else
+                            {
+                                try
+                                {
+                                    File.WriteAllText(path + "Alumnos Exportados.csv", stringCSV);
+                                }
+                                catch (IOException)
+                                {
+                                    MessageBox.Show("se esta usando el archivo desde otro lado, cierre la app y vuelva a intentar");
+                                }
+                            }
+                        } else
+                        {
+                            if (File.Exists(path + "Alumnos Exportados.json"))
+                            {
+                                var respuesta = MessageBox.Show("Advertencia el archivo ya fue exportado quiere sobrescribir?", "Archivo JSON", MessageBoxButtons.YesNo);
+                                if (DialogResult.Yes == respuesta)
+                                {
+                                    try
+                                    {
+                                        File.WriteAllText(path + "Alumnos Exportados.json", stringJson);
+                                    }
+                                    catch (IOException)
+                                    {
+                                        MessageBox.Show("se esta usando el archivo desde otro lado, cierre la app y vuelva a intentar");
+
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    File.WriteAllText(path + "Alumnos Exportados.json", stringJson);
+                                } catch (IOException)
+                                {
+                                    MessageBox.Show("se esta usando el archivo desde otro lado, cierre la app y vuelva a intentar");
+                                }
+
+                            }
+                        }
                     }
+
                 }
             }
         }
