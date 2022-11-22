@@ -135,48 +135,88 @@ namespace Entidades
             //}
         }
     }
-    //public class AlumnoJSON
-    //{
-    //    private string id;
-    //    private int A;
-    //    private List<Empleado> personalACargo;
-    //    private decimal salario;
+    public class AlumnoJSON
+    {
+        private int id;
+        private string? nombre;
+        private string? password;
+        private string? perfil;
+        private int materiaA;
+        private bool estadoMA;
 
-    //    public string NombreCompleto
-    //    {
-    //        get
-    //        {
-    //            return nombreCompleto;
-    //        }
-    //        set
-    //        {
-    //            nombreCompleto = value;
-    //        }
-    //    }
+        public int Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
+        }
+        public string Nombre
+        {
+            get
+            {
+                return nombre;
+            }
+            set
+            {
+                nombre = value;
+            }
+        }
+        public string? Password
+        {
+            get
+            {
+                return password;
+            }
+            set
+            {
+                password = value;
+            }
+        }
+        public string? Perfil 
+        {
+            get
+            {
+                return perfil;
+            }
+            set
+            {
+                perfil = value;
+            }
+        }
+        public int MateriaA
+        {
+            get { return materiaA; }
+            set
+            {
+                materiaA = value;
+            }
+        }
+        public bool EstadoMA
+        {
+            get => estadoMA;
+            set
+            {
+                estadoMA = value;
+            }
+        }
 
-    //    public DateTime FechaNacimiento
-    //    {
-    //        get
-    //        {
-    //            return fechaNacimiento;
-    //        }
-    //        set
-    //        {
-    //            fechaNacimiento = value;
-    //        }
-    //    }
+        public AlumnoJSON(int id,string? nombre,string? password,string? perfil,int materiaA,bool estadoMA) : this()
+        {
+            this.id = id;
+            this.nombre = nombre;
+            this.password = password;
+            this.perfil = perfil;
+            this.materiaA = materiaA;
+            this.estadoMA = estadoMA;
+        }
 
-    //    public decimal Salario
-    //    {
-    //        get
-    //        {
-    //            return salario;
-    //        }
-    //        set
-    //        {
-    //            salario = value;
-    //        }
-    //    }
-
-    //}
+        public AlumnoJSON()
+        {
+        }
+    }
 }

@@ -110,19 +110,20 @@ namespace SysAcademy2
                         string stringJson = "";
                         foreach (var alumno in alumnos)
                         {
-                             stringJson = JsonSerializer.Serialize(alumno);
+                            AlumnoJSON alumnoJSON = new(alumno.GetID(),alumno.GetNombre(),alumno.GetPassword(),alumno.GetPerfil(),alumno.materiaA,alumno.estadoMA);
+                            stringJson = JsonSerializer.Serialize(alumnoJSON);
                         }
                         string path = "E:\\2022 2do cuatri\\TP1\\Sol1\\";
-                            if (File.Exists(path + "Alumnos Exportados.json"))
+                            if (File.Exists("Alumnos Exportados.json"))
                             {
                                 var respuesta = MessageBox.Show("Advertencia el archivo ya fue exportado quiere sobrescribir?", "Archivo JSON", MessageBoxButtons.YesNo);
                                 if (DialogResult.Yes == respuesta)
                                 {
-                                    File.WriteAllText(path + "Alumnos Exportados.json", stringJson);
+                                    File.WriteAllText("Alumnos Exportados.json", stringJson);
                                 }
                             } else
                             {
-                                File.WriteAllText(path + "Alumnos Exportados.json", stringJson);
+                                File.WriteAllText("Alumnos Exportados.json", stringJson);
                             }
                     }
                 }
