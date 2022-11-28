@@ -9,9 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Entidades;
 using datos;
-using D = datos.Usuarios;
 using System.Drawing.Text;
-using U = datos.UsuarioPermisos;
 using SysAcademy2;
 
 namespace SysAcademy
@@ -50,7 +48,7 @@ namespace SysAcademy
         private void Main_Load(object sender, EventArgs e)
         {
 //            usuarioActivo = Sql.ObtenerUsuarioActivo();
-//          usuarioActivo = D.listaUsuarios.Find(objecto => objecto.activo == true);
+//          usuarioActivo = D.listaUsuarios.Find(objecto => objecto.activo == true);}
             string BienvenidoMsg = "Bienvenido, " + usuarioActivo.GetNombre();
             Mensaje.Text = BienvenidoMsg;
 
@@ -141,7 +139,10 @@ namespace SysAcademy
         {
             if(MessageBox.Show("Seguro quiere cerrar sesion?","info",MessageBoxButtons.OKCancel,MessageBoxIcon.Information) == DialogResult.OK)
             {
-                SqlUsuario.ActualizarUsuario(usuarioActivo, "activo", 0);
+                if(usuarioActivo != null)
+                {
+                    SqlUsuario.ActualizarUsuario(usuarioActivo, "activo", 0);
+                }
                 //D.listaUsuarios[D.BuscarActivoIndex(D.listaUsuarios)].activo = false;   
                 Close();
             }           
@@ -239,16 +240,19 @@ namespace SysAcademy
                     int idMateria = alumno.materiaA;
                     Materia? materia = SqlMateria.ObtenerMateria("id",idMateria);
                   //Materia materia = Materias.MateriafromList(idMateria);
-                    if (idMateria != -1 && !cbox_materia.Items.Contains(materia.GetNombre()))
+                    if(materia != null)
                     {
-                        cbox_materia.Items.Add(materia.GetNombre());
+                        if (idMateria != -1 && !cbox_materia.Items.Contains(materia.GetNombre()))
+                        {
+                            cbox_materia.Items.Add(materia.GetNombre());
+                        }
                     }
                 }
 
                 //buscar Conexion entre Examen y Alumno Activo
                 if (usuarioActivo.GetPerfil() == "Alumno")
                 {
-                    List<Examen> Lista = Sql.ObtenerTodosLosExamenes();
+                    List<Examen> Lista = SqlG<Examen>.ObtenerTodosdelDatoT();
                     List<AsistenciaAlumno> ListaAsistencia = SqlAlumnos.ObtenerAsistencias("idAlumno", usuarioActivo.GetID());
                     foreach (var examen in Lista)
                     {
@@ -270,7 +274,10 @@ namespace SysAcademy
             {
                 if (MessageBox.Show("Seguro quiere cerrar sesion?", "info", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
                 {
-                    D.listaUsuarios[D.BuscarActivoIndex(D.listaUsuarios)].activo = false;
+                    if(usuarioActivo != null)
+                    {
+                        usuarioActivo.activo = false;
+                    }
                     Close();
                 }
             }

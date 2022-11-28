@@ -107,8 +107,6 @@
         #endregion
 
         private Button btn_Modify;
-        private RadioButton radioButton1;
-        private RadioButton radioButton2;
         private ListBox lb_Alumnos;
         private ListBox lb_materias;
         private RadioButton rbtn_Regular;

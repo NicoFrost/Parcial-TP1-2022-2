@@ -58,9 +58,9 @@ namespace datos
             }
             return usuario;
         }
-        public static Usuario ObtenerUsuario(string nombre)
+        public static Usuario? ObtenerUsuario(string nombre)
         {
-            Usuario usuario = new Usuario();
+            Usuario? usuario = new Usuario();
             try
             {
 
@@ -73,9 +73,10 @@ namespace datos
                     usuario = Usuario.PasoDeInformacion(reader);
                 }
             }
-            catch (Exception)
+            catch (SqlException)
             {
-                throw new Exception("Error de conexión a la base de datos");
+                usuario = null;
+                
             }
             finally
             {

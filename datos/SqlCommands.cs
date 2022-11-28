@@ -221,6 +221,39 @@ namespace datos
         }
 
         //Busqueda | Examen
+        public static Examen ObtenerExamen(string nombre)
+        {
+            Examen examen = new Examen();
+            if (nombre != "")
+            {
+                try
+                {
+
+                    command.CommandText = $"SELECT * FROM Examen WHERE nombre = '{nombre}'";
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        examen = Examen.PasoDeInformacion(reader);
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Error de conexión a la base de datos");
+                }
+                finally
+                {
+                    if (connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+
+                }
+            }
+
+            return examen;
+        }
         public static Examen ObtenerExamen(int idExamen,int idAlumno)
         {
             Examen examen = new Examen();
@@ -287,44 +320,11 @@ namespace datos
 
             return examen;
         }
-        public static Examen ObtenerExamen(string nombre)
-        {
-            Examen examen = new Examen();
-            if (nombre != "")
-            {
-                try
-                {
-
-                    command.CommandText = $"SELECT * FROM Examen WHERE nombre = '{nombre}'";
-                    connection.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        examen = Examen.PasoDeInformacion(reader);
-                    }
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Error de conexión a la base de datos");
-                }
-                finally
-                {
-                    if (connection.State == ConnectionState.Open)
-                    {
-                        connection.Close();
-                    }
-
-                }
-            }
-
-            return examen;
-        }
 
 
         public static Notas? ObtenerNota(int idAlumno,int idExamen)
         {
-            Notas notas = new Notas();
+            Notas? notas = new Notas();
             if (idExamen > -1)
             {
                 try
@@ -339,7 +339,7 @@ namespace datos
                         notas = Notas.PasoDeInformacion(reader);
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     notas = null;
                 }
@@ -356,9 +356,12 @@ namespace datos
 
         }
         
-
+        //Candidatos a GENERICS con DELEGADOS
+        /*
+         usar genericos para usar solo una funcion para obtener todos mientras que los delegados van a decidir que Parseo usar para devolver un objeto T 
+         */
         //Busqueda y Obtencion Total
-        public static List<Usuario> ObtenerTodosLosUsuarios()
+      /*public static List<Usuario> ObtenerTodosLosUsuarios()
         {
             List<Usuario> listaUsuarios = new List<Usuario>();
             try
@@ -431,7 +434,7 @@ namespace datos
 
                 while (reader.Read())
                 {
-                    Materia materia = Materia.PasoDeInformacion(reader);
+                    Materia? materia = Materia.PasoDeInformacion(reader);
 
                     listaMaterias.Add(materia);
                 }
@@ -482,6 +485,40 @@ namespace datos
 
             return examenes;
         }
+        */
+        public static List<Examen> ObtenerTodosLosExamenes(int id)
+        {
+            List<Examen> examenes = new List<Examen>();
+
+            try
+            {
+                command.CommandText = $"SELECT e.* FROM Examen AS e INNER JOIN ExamenAlumno AS a ON a.ExamenID = e.id WHERE a.alumnoID = {id}";
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Examen examen = Examen.PasoDeInformacion(reader);
+
+                    examenes.Add(examen);
+                }
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error de conexión a la base de datos");
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+
+            }
+
+            return examenes;
+        }
+
         public static List<Alumno> ObtenerTodosLosAlumnos()
         {
             List<Alumno> listaAlumno = new List<Alumno>();
@@ -601,5 +638,92 @@ namespace datos
         }
 
 
+    }
+
+    public class SqlG<T>
+    {
+        private static SqlConnection connection; // Puente.
+        private static SqlCommand command;      // Quien lleva la consulta.
+
+
+        static SqlG()
+        {
+            connection = new SqlConnection(@"
+                Data Source = DESKTOP-HD6ABJ7;
+                Database = Universidad;
+                Trusted_Connection = True;
+            ");
+
+            command = new SqlCommand();
+            command.Connection = connection;
+            command.CommandType = CommandType.Text;
+        }
+
+
+        public static List<T> ObtenerTodosdelDatoT() // ObtenerTodosdelDatoT
+        {
+            List<T> listaDato = new List<T>();
+            try
+            {
+                if(typeof(T) == typeof(Usuario))
+                {
+                    command.CommandText = "SELECT u.id,u.nombre,password,p.nombre perfil,activo FROM Usuario AS U INNER JOIN Permiso AS p ON u.id_permiso=p.id";
+                }
+                else if (typeof(T) == typeof(Materia))
+                {
+                    command.CommandText = "SELECT id,nombre,idUserP_Asignado FROM Materia";
+                } else if (typeof(T) == typeof(Funcion))
+                {
+                    command.CommandText = "SELECT f.id,f.nombre,p.nombre permisoReq FROM Funcion AS f INNER JOIN Permiso AS p ON f.id_permiso = p.id";
+                } else if(typeof(T) == typeof(Examen))
+                {
+                    command.CommandText = "SELECT * FROM Examen";
+                } else if(typeof(T) == typeof(Alumno))
+                {
+                    command.CommandText = "SELECT * FROM Usuario WHERE id_permiso = 2";
+                }
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                
+                UsuariosG<T>.delegadoSql? delegado = null;
+                if (typeof(T) == typeof(Usuario))
+                {
+                    delegado = new UsuariosG<T>.delegadoSql(UsuariosG<T>.PasoDeInformacionU);
+                } else if(typeof(T) == typeof(Materia))
+                {
+                    delegado = new UsuariosG<T>.delegadoSql(UsuariosG<T>.PasoDeInformacionM);
+                } else if (typeof(T) == typeof(Funcion))
+                {
+                    delegado = new UsuariosG<T>.delegadoSql(UsuariosG<T>.PasoDeInformacionF);
+                } else if(typeof(T) == typeof(Examen))
+                {
+                    delegado = new UsuariosG<T>.delegadoSql(UsuariosG<T>.PasoDeInformacionE);
+                }
+                while (reader.Read())
+                {
+                    if(delegado != null)
+                    {
+                        T? usuario = delegado(reader);
+                        if(usuario != null)
+                        {
+                            listaDato.Add(usuario);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error de conexión a la base de datos");
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+
+            }
+            return listaDato;
+        }
     }
 }

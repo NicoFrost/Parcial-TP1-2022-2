@@ -1,6 +1,7 @@
 ﻿
-
+using System;
 using System.Data.SqlClient;
+using System.Runtime.CompilerServices;
 
 namespace Entidades
 {
@@ -96,6 +97,107 @@ namespace Entidades
             return usuario;
         }
     }
+
+    public class UsuariosG<T>
+    {
+
+        public delegate T? delegadoSql(SqlDataReader v);
+
+        public static T? PasoDeInformacionU(SqlDataReader v)
+        {
+
+            //El paso de informacion de lo leido de la base de datos
+            Usuario usuario = new Usuario(
+            Convert.ToInt32(v["id"]),
+            v["nombre"].ToString() ?? "",
+            v["password"].ToString() ?? "",
+            v["perfil"].ToString() ?? "",
+            Convert.ToBoolean(v["activo"])
+            );
+
+            try
+            {
+                return (T)Convert.ChangeType(usuario, typeof(T));
+            }
+            catch (InvalidCastException)
+            {
+                return default(T);
+            }
+        }
+
+        public static T? PasoDeInformacionF(SqlDataReader v)
+        {
+            //El paso de informacion de lo leido de la base de datos
+            Funcion funcion = new Funcion(
+                Convert.ToInt32(v["id"]),
+                v["nombre"].ToString() ?? "",
+                v["permisoReq"].ToString() ?? ""
+                );
+
+            try
+            {
+                return (T)Convert.ChangeType(funcion, typeof(T));
+            }
+            catch (InvalidCastException)
+            {
+                return default(T);
+            }
+        }
+
+        public static T? PasoDeInformacionM(SqlDataReader v)
+        {
+            //El paso de informacion de lo leido de la base de datos
+            int profesor;
+            try
+            {
+                profesor = Convert.ToInt32(v["idUserP_Asignado"]);
+            }
+            catch (Exception)
+            {
+                profesor = -1;
+            }
+            Materia materia = new();
+            if (true)
+            {
+                materia = new Materia(
+                Convert.ToInt32(v["id"]),
+                v["nombre"].ToString() ?? "",
+                profesor
+                );
+            }
+
+            try
+            {
+                return (T)Convert.ChangeType(materia, typeof(T));
+            }
+            catch (InvalidCastException)
+            {
+                return default(T);
+            }
+        }
+
+        public static T? PasoDeInformacionE(SqlDataReader v)
+        {
+
+            //El paso de informacion de lo leido de la base de datos
+            Examen examen = new Examen(
+            Convert.ToInt32(v["id"]),
+            v["nombre"].ToString() ?? "",
+            Convert.ToDateTime(v["fecha"]),
+            Convert.ToInt32(v["idMateria"])
+            );
+
+            try
+            {
+                return (T)Convert.ChangeType(examen, typeof(T));
+            }
+            catch (InvalidCastException)
+            {
+                return default(T);
+            }
+        }
+    }
+
     public class Permisos
     {
         public int idUsuario { get; set; }

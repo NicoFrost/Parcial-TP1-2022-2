@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Entidades;
 using datos;
-using DF = datos.Funciones;
 using System.Security.Cryptography.X509Certificates;
 using SysAcademy2;
 
@@ -19,7 +18,6 @@ namespace SysAcademy
         [STAThread]
         static void Main()
         {
-            HardData.InicializarDatos();
             
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -30,21 +28,3 @@ namespace SysAcademy
     }
     
 }
-    /*
-    public class Examen
-    {
-        private string date;
-        private string name;
-
-        public string Date
-        {
-            get { return date; }
-            set { date = value; }
-        }
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
-    }
-*/

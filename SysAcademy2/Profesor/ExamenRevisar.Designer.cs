@@ -195,7 +195,6 @@
         private Label label1;
         private Button btn_confirm;
         private Button btn_cancel;
-        private NumericUpDown numericUpDown1;
         private Button button3;
         private Button button4;
         private HScrollBar hScrollBar1;

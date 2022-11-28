@@ -24,7 +24,7 @@ namespace SysAcademy2
             Cbx_Profesores.Items.Clear();
             cb_correlativas.Items.Clear();
             lb_correlativasAdded.Items.Clear();
-            foreach(var Usuarios in Sql.ObtenerTodosLosUsuarios())
+            foreach(var Usuarios in /*Sql.ObtenerTodosLosUsuarios()*/SqlG<Usuario>.ObtenerTodosdelDatoT())
             {
                 if(Usuarios.GetPerfil() == "Profesor")
                 {
@@ -32,7 +32,7 @@ namespace SysAcademy2
                 }
             }
             Cbx_Profesores.Items.Add("Ninguno");
-            foreach (var materia in Sql.ObtenerTodasLasMaterias())
+            foreach (var materia in SqlG<Materia>.ObtenerTodosdelDatoT())
             {
                 cb_correlativas.Items.Add(materia.GetNombre());
             }
@@ -53,7 +53,7 @@ namespace SysAcademy2
                     {
                         var usuario = SqlUsuario.ObtenerUsuario(Cbx_Profesores.SelectedItem.ToString());
                         materia.SetProfesorAsignado(usuario.GetID());
-                        materia.SetProfesorAsignado(Usuarios.BuscarUsuario(Cbx_Profesores.SelectedItem.ToString()));
+                        materia.SetProfesorAsignado(SqlUsuario.ObtenerUsuario(Cbx_Profesores.SelectedItem.ToString()).GetID());
                     }
                 }
                 else
@@ -64,7 +64,7 @@ namespace SysAcademy2
                 for(int i = 0;i < lb_correlativasAdded.Items.Count; i++)
                 {
                     var item = lb_correlativasAdded.Items[i].ToString();
-                    foreach(var materiaIN in Sql.ObtenerTodasLasMaterias())
+                    foreach(var materiaIN in SqlG<Materia>.ObtenerTodosdelDatoT())
                     {
                         if(item == materiaIN.GetNombre())
                         {

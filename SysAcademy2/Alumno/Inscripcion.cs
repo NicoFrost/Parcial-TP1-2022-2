@@ -26,9 +26,10 @@ namespace SysAcademy2
             {
                 string materiaElegida = lb_TotMaterias.SelectedItem.ToString();
                 Alumno alumno = new();
-                var usuario = SqlUsuario.ObtenerUsuarioActivo();
+                Usuario? usuario = SqlUsuario.ObtenerUsuarioActivo();
+                if(usuario != null)
                 alumno = Usuario.ConvertirAlumno(usuario);
-                Materia materia = SqlMateria.ObtenerMateria(materiaElegida);
+                Materia? materia = SqlMateria.ObtenerMateria(materiaElegida);
 
                 if (SqlAlumnos.CantMateriasAlumno(alumno.GetID()) != 2)
                 { if(materia != null)
@@ -140,7 +141,7 @@ namespace SysAcademy2
 
         private void Inscripcion_Load(object sender, EventArgs e)
         {
-            foreach(var materia in Sql.ObtenerTodasLasMaterias())
+            foreach(var materia in /*Sql.ObtenerTodasLasMaterias()*/SqlG<Materia>.ObtenerTodosdelDatoT())
             {
                 lb_TotMaterias.Items.Add(materia.GetNombre());
             }

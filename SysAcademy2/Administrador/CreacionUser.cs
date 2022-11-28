@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using datos;
+﻿using datos;
 using Entidades;
-using D = datos.Usuarios;
 
 namespace SysAcademy
 {
@@ -29,17 +19,19 @@ namespace SysAcademy
             if (rb_Admin.Checked)
             {
                 usuario.SetPerfil("Admin");
-            } else if (rb_Profesor.Checked)
+            }
+            else if (rb_Profesor.Checked)
             {
                 usuario.SetPerfil("Profesor");
-            } else if (rb_Alumno.Checked)
-            { 
+            }
+            else if (rb_Alumno.Checked)
+            {
                 usuario.SetPerfil("Alumno");
             }
             SqlUsuario.InsertarUsuario(usuario);
             Usuario userVerif = SqlUsuario.ObtenerUsuario(txtB_User.Text);
-            MessageBox.Show($"Has creado y metido el usuario: Nombre:{userVerif.GetNombre()} Pass: {userVerif.GetPassword()} y con acceso de {userVerif.GetPerfil()}",$"{usuario.GetID()}");
-            Close(); 
+            MessageBox.Show($"Has creado y metido el usuario: Nombre:{userVerif.GetNombre()} Pass: {userVerif.GetPassword()} y con acceso de {userVerif.GetPerfil()}", $"{usuario.GetID()}");
+            Close();
         }
 
         private void btn_Cancel_Click(object sender, EventArgs e)

@@ -44,18 +44,6 @@ namespace Entidades
             SetNombre(nombre);
             SetProfesorAsignado(idProfesor);
         }
-
-        //bool PasoNuloInfo(SqlDataReader v)
-        //{
-        //    try
-        //    {
-        //        return Convert.ToInt32(v["idUserP_Asignado"]);
-        //    }
-        //    catch (InvalidCastException)
-        //    {
-        //        return true;
-        //    }
-        //}
         public static Materia? PasoDeInformacion(SqlDataReader v)
         {
             //El paso de informacion de lo leido de la base de datos
@@ -79,25 +67,5 @@ namespace Entidades
             
             return materia;
         }
-
-        //public Materia(int id, string nombre, int profesorAsignadoID)
-        //{
-        //    SetID(id);
-        //    SetNombre(nombre);
-        //    this.profesorAsignadoID = profesorAsignadoID;
-        //}
-
-        //public static Materia PasoDeInformacion(SqlDataReader v)
-        //{
-        //    //El paso de informacion de lo leido de la base de datos
-        //    Materia funcion = new Materia(
-        //        Convert.ToInt32(v["id"]),
-        //        v["nombre"].ToString() ?? "",
-        //        Convert.ToInt32(v["idUserP_Asignado"])
-        //        );
-
-        //    return funcion;
-        //}
-
     }
 }

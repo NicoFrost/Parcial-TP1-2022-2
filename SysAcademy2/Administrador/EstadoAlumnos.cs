@@ -24,7 +24,7 @@ namespace SysAcademy2
         {
             lb_Alumnos.Items.Clear();
             lb_materias.Items.Clear();
-            foreach (var materia in Sql.ObtenerTodasLasMaterias())
+            foreach (var materia in /*Sql.ObtenerTodasLasMaterias()*/SqlG<Materia>.ObtenerTodosdelDatoT())
             {
                 lb_materias.Items.Add(materia.GetNombre());
             }
@@ -59,8 +59,8 @@ namespace SysAcademy2
 
         private void btn_Modify_Click(object sender, EventArgs e)
         {
-            Materia materia = SqlMateria.ObtenerMateria(lb_materias.SelectedItem.ToString());
-            Alumno alumno = SqlAlumnos.ObtenerAlumno(lb_Alumnos.SelectedItem.ToString(),materia.GetID());
+            Materia? materia = SqlMateria.ObtenerMateria(lb_materias.SelectedItem.ToString());
+            Alumno? alumno = SqlAlumnos.ObtenerAlumno(lb_Alumnos.SelectedItem.ToString(),materia.GetID());
             if (materia != null && alumno != null && (rbtn_Libre.Checked || rbtn_Regular.Checked))
             {
                 if (rbtn_Libre.Checked)

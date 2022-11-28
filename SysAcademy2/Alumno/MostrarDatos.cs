@@ -26,18 +26,22 @@ namespace SysAcademy2
             if(usuarioActivo != null)
             {
                 Materia? materia = new();
-                List<Examen> lista = Sql.ObtenerTodosLosExamenes();
+                List<Examen> lista = Sql.ObtenerTodosLosExamenes(usuarioActivo.GetID());
+
+                //Utilitario<Examen> utilitario = new Utilitario<Examen>();
+                //utilitario.Recorrer(lista);
+
                 foreach (var examen in lista)
                 {
                     Examen examenSql = Sql.ObtenerExamen(examen.GetID(), usuarioActivo.GetID());
                     if (examen != null && examenSql.GetID() == examen.GetID())
                     {
-                        materia = SqlMateria.ObtenerMateria("id",examen.materia);
-                        if(materia != null && materia.GetID() != -1)
+                        materia = SqlMateria.ObtenerMateria("id", examen.materia);
+                        if (materia != null && materia.GetID() != -1)
                         {
                             int n = DG_ListaMaterias.Rows.Add();
                             DG_ListaMaterias.Rows[n].Cells[0].Value = examen.GetNombre();
-                            if(Sql.ObtenerNota(usuarioActivo.GetID(), examen.GetID()) != null)
+                            if (Sql.ObtenerNota(usuarioActivo.GetID(), examen.GetID()) != null)
                             {
                                 DG_ListaMaterias.Rows[n].Cells[1].Value = Sql.ObtenerNota(usuarioActivo.GetID(), examen.GetID()).GetNotaExamen();
                             }
@@ -45,7 +49,7 @@ namespace SysAcademy2
                             DG_ListaMaterias.Rows[n].Cells[3].Value = SqlUsuario.ObtenerUsuario(materia.GetProfesorAsignado()).GetNombre();
                             List<Materia>? correlativas = SqlMateria.ObtenerTodasLasCorrelativas(materia.GetID());
                             string correlativaComa = "";
-                            foreach(var materiaC in correlativas)
+                            foreach (var materiaC in correlativas)
                             {
                                 correlativaComa += $"{materiaC.GetNombre()},";
                             }
@@ -53,29 +57,6 @@ namespace SysAcademy2
                         }
                     }
                 }
-
-
-                //int alumnoID = Usuarios.BuscarActivo().GetID();
-                //foreach(var fecha in Materias.BuscarAsistencia(alumnoID)){
-
-                //    if (fecha == examen.fecha)
-                //    {
-                //        int idExamen = examen.GetID();
-                //        Notas? notaExamen;
-                //        int n = DG_ListaMaterias.Rows.Add();
-                //        DG_ListaMaterias.Rows[n].Cells[0].Value = examen.GetNombre();
-                //        if(Examenes.NotasExamenes.Count > 0)
-                //        {
-                //            notaExamen = Examenes.NotasExamenes.Find(objeto => objeto.GetExamenID() == idExamen && objeto.GetAlumnoID() == alumnoID);
-                //            if(notaExamen != null)
-                //            {
-                //                DG_ListaMaterias.Rows[n].Cells[1].Value = notaExamen.GetNotaExamen();
-                //            }
-                //        }
-                //        Materia materia = Materias.MateriafromList(examen.materia);
-                //        DG_ListaMaterias.Rows[n].Cells[2].Value = materia.GetNombre();
-                //        DG_ListaMaterias.Rows[n].Cells[3].Value = Usuarios.BuscarUsuario(materia.GetProfesorAsignado());
-                //    }
             }
         }
     }

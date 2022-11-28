@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.Json;
 using Entidades;
+using System.IO;
 
 namespace SysAcademy2
 {
@@ -22,7 +23,8 @@ namespace SysAcademy2
 
         private void AsignacionMateria_Load(object sender, EventArgs e)
         {
-            List<Usuario> listaUsuarios = Sql.ObtenerTodosLosUsuarios();
+            //List<Usuario> listaUsuarios = Sql.ObtenerTodosLosUsuarios();
+            List<Usuario> listaUsuarios = SqlG<Usuario>.ObtenerTodosdelDatoT(); //Obtener todos los datos T
             Cbx_Profesores.Items.Clear();
             foreach (var Usuarios in listaUsuarios)
             {
@@ -31,7 +33,7 @@ namespace SysAcademy2
             }
             Cbx_Profesores.Items.Add("Ninguno");
             listBox1.Items.Clear();
-            List<Materia> listaMat = Sql.ObtenerTodasLasMaterias();
+            List<Materia> listaMat = SqlG<Materia>.ObtenerTodosdelDatoT();
             foreach(var materia in listaMat)
             {
                 listBox1.Items.Add(materia.GetNombre());
@@ -76,7 +78,7 @@ namespace SysAcademy2
 
         private void btn_Modify_Click(object sender, EventArgs e)
         {
-            foreach(var materia in Sql.ObtenerTodasLasMaterias())
+            foreach(var materia in SqlG<Materia>.ObtenerTodosdelDatoT())
             {
                 if(listBox1.SelectedItem.ToString() == materia.GetNombre())
                 {
@@ -99,91 +101,75 @@ namespace SysAcademy2
 
         private void btn_Exportar_Click(object sender, EventArgs e)
         {
-            string path = "E:\\2022 2do cuatri\\TP1\\Sol1\\";
             if (listBox1.SelectedItem != null)
             {
-                Materia materia = SqlMateria.ObtenerMateria(listBox1.SelectedItem.ToString());
+                Materia? materia = SqlMateria.ObtenerMateria(listBox1.SelectedItem.ToString());
                 if(materia != null)
                 {
                     List<Alumno>? alumnos = SqlAlumnos.AlumnosAnotados(materia);
                     if (alumnos != null)
                     {
-                        string stringJson = "";
-                        string stringCSV = "id,nombre,password,perfil,materiaA,estadoMA,activo\n";
+                       
                         DialogResult result = new();
+
                         result = MessageBox.Show("JSON(Y) o CSV(N)?", "", MessageBoxButtons.YesNo);
-                        foreach (var alumno in alumnos)
+
+                        DialogResult resultado = DialogResult.Yes;
+                        if (File.Exists("Alumnos Exportados.csv"))
                         {
-                            AlumnoJSON alumnoJSON = new(alumno.GetID(), alumno.GetNombre(), alumno.GetPassword(), alumno.GetPerfil(), alumno.materiaA, alumno.estadoMA, alumno.activo);
-                            if (result == DialogResult.Yes)
-                            {
-                                stringJson = JsonSerializer.Serialize(alumnoJSON);
-                            } else
-                            {
-                                stringCSV += $"{alumnoJSON.Id},{alumnoJSON.Nombre},{alumnoJSON.Password},{alumnoJSON.Perfil},{alumnoJSON.MateriaA},{alumnoJSON.EstadoMA},{alumnoJSON.Activo}\n";
-                            }
+                            resultado = MessageBox.Show("Sobrescribir Archivos?","",MessageBoxButtons.YesNo);
                         }
-                        if (result == DialogResult.No)
+                        if (result == DialogResult.Yes)
                         {
-                            if (File.Exists(path + "Alumnos Exportados.json"))
-                            {
-                                var respuesta = MessageBox.Show("Advertencia el archivo ya fue exportado quiere sobrescribir?", "Archivo JSON", MessageBoxButtons.YesNo);
-                                if (DialogResult.Yes == respuesta)
-                                {
-                                    try
-                                    {
-                                        File.WriteAllText(path + "Alumnos Exportados.csv", stringCSV);
-
-                                    }
-                                    catch (IOException)
-                                    {
-                                        MessageBox.Show("se esta usando el archivo desde otro lado, cierre la app y vuelva a intentar");
-                                    }
-                                }
-                            }
-                            else
+                            if(resultado == DialogResult.Yes)
                             {
                                 try
                                 {
-                                    File.WriteAllText(path + "Alumnos Exportados.csv", stringCSV);
-                                }
-                                catch (IOException)
-                                {
-                                    MessageBox.Show("se esta usando el archivo desde otro lado, cierre la app y vuelva a intentar");
-                                }
-                            }
-                        } else
-                        {
-                            if (File.Exists(path + "Alumnos Exportados.json"))
-                            {
-                                var respuesta = MessageBox.Show("Advertencia el archivo ya fue exportado quiere sobrescribir?", "Archivo JSON", MessageBoxButtons.YesNo);
-                                if (DialogResult.Yes == respuesta)
-                                {
-                                    try
+                                    JsonSerializerOptions opciones = new JsonSerializerOptions();
+                                    opciones.WriteIndented = true;
+                                    List<AlumnoJSON> alumnosJSON = new List<AlumnoJSON>();
+                                    foreach (var alumno in alumnos)
                                     {
-                                        File.WriteAllText(path + "Alumnos Exportados.json", stringJson);
-                                    }
-                                    catch (IOException)
-                                    {
-                                        MessageBox.Show("se esta usando el archivo desde otro lado, cierre la app y vuelva a intentar");
+                                        AlumnoJSON alumnoJSON = new(alumno.GetID(), alumno.GetNombre(), alumno.GetPassword(), alumno.GetPerfil(), alumno.materiaA, alumno.estadoMA, alumno.activo);
 
+                                        alumnosJSON.Add(alumnoJSON);
                                     }
+                                    string jsonString = JsonSerializer.Serialize(alumnosJSON, opciones);
+                                    File.WriteAllText("Alumnos_Exportados.json", jsonString);
+                                } catch (Exception excepcion)
+                                {
+                                    MessageBox.Show("Una Aplicacion esta usando el .Json, cierrelo y vuelva a intentar\n" + excepcion.Message);
                                 }
                             }
-                            else
+                        } else 
+                        {
+                            if(resultado == DialogResult.Yes)
                             {
+                                string stringCSV = "id,nombre,password,perfil,materiaA,estadoMA,activo\n";
+                                StreamWriter escritor = new StreamWriter("Alumnos Exportados.csv");
                                 try
                                 {
-                                    File.WriteAllText(path + "Alumnos Exportados.json", stringJson);
-                                } catch (IOException)
-                                {
-                                    MessageBox.Show("se esta usando el archivo desde otro lado, cierre la app y vuelva a intentar");
-                                }
+                                    foreach (var alumno in alumnos)
+                                    {
+                                        AlumnoJSON alumnoJSON = new(alumno.GetID(), alumno.GetNombre(), alumno.GetPassword(), alumno.GetPerfil(), alumno.materiaA, alumno.estadoMA, alumno.activo);
 
+                                        stringCSV += $"{alumnoJSON.Id},{alumnoJSON.Nombre},{alumnoJSON.Password},{alumnoJSON.Perfil},{alumnoJSON.MateriaA},{alumnoJSON.EstadoMA},{alumnoJSON.Activo}\n";
+                                    }
+                                    escritor.WriteLine(stringCSV);
+
+                                }
+                                catch (Exception excepcion)
+                                {
+                                    MessageBox.Show("Una Aplicacion esta usando el .csv, cierrelo y vuelva a intentar\n" + excepcion.Message);
+                                }
+                                finally
+                                {
+                                    escritor.Close();
+                                    escritor.Dispose();
+                                }
                             }
                         }
                     }
-
                 }
             }
         }

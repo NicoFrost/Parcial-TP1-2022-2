@@ -86,7 +86,6 @@
         #endregion
 
         private MonthCalendar FCal_diaAsistencia;
-        private Button btn_cancel;
         private Button btn_Aceptar;
         private ComboBox cbox_materia;
     }

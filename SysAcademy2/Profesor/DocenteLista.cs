@@ -28,7 +28,8 @@ namespace SysAcademy2
             lbl_Materia.Text = "";
             lb_Examenes.Items.Clear();
             Usuario activo = SqlUsuario.ObtenerUsuarioActivo();
-            var Lista = Sql.ObtenerTodosLosExamenes();
+            var Lista = SqlG<Examen>.ObtenerTodosdelDatoT();
+          //var Lista = Sql.ObtenerTodosLosExamenes();
             foreach (var examen in Lista)
             {
                 Materia? materia = SqlMateria.ObtenerMateria("id",examen.materia);
@@ -44,7 +45,7 @@ namespace SysAcademy2
             if(lb_Examenes.SelectedItem != null)
             {
                 string examenSel = lb_Examenes.SelectedItem.ToString();
-                foreach (var examen in Sql.ObtenerTodosLosExamenes())
+                foreach (var examen in SqlG<Examen>.ObtenerTodosdelDatoT())
                 {
                     if (examen.GetNombre() == examenSel)
                     {

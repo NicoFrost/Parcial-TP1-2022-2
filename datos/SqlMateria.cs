@@ -148,9 +148,9 @@ namespace datos
                     materia = Materia.PasoDeInformacion(reader);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("Error de conexión a la base de datos");
+                throw new Exception("Error de conexión a la base de datos\n" + ex);
             }
             finally
             {
@@ -162,6 +162,36 @@ namespace datos
             }
             return materia;
         }
+        public static Materia? ObtenerMateria(string columna, string dato)
+        {
+            Materia? materia = new Materia();
+            try
+            {
+
+                command.CommandText = $"SELECT * FROM Materia WHERE {columna} = {dato}";
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    materia = Materia.PasoDeInformacion(reader);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error de conexión a la base de datos\n" + ex);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+
+            }
+            return materia;
+        }
+
         public static List<Materia>? ObtenerMaterias(string columna, int dato)
         {
             List<Materia>? materias = new ();
@@ -174,7 +204,7 @@ namespace datos
 
                 while (reader.Read())
                 {
-                    Materia materia = new Materia();
+                    Materia? materia = new Materia();
                     materia = Materia.PasoDeInformacion(reader);
 
                     materias.Add(materia);
@@ -196,7 +226,7 @@ namespace datos
         }
         public static Materia? ObtenerMateria(string nombreMateria)
         {
-            Materia materia = new Materia();
+            Materia? materia = new Materia();
             try
             {
 
