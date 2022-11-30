@@ -61,6 +61,7 @@
             this.lb_Examenes.Size = new System.Drawing.Size(268, 244);
             this.lb_Examenes.TabIndex = 2;
             this.lb_Examenes.Click += new System.EventHandler(this.lb_Examenes_Click);
+            this.lb_Examenes.SelectedIndexChanged += new System.EventHandler(this.lb_Examenes_SelectedIndexChanged);
             // 
             // btn_CExamen
             // 

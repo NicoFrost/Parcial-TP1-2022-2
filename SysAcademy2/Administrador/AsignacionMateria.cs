@@ -114,14 +114,19 @@ namespace SysAcademy2
 
                         result = MessageBox.Show("JSON(Y) o CSV(N)?", "", MessageBoxButtons.YesNo);
 
-                        DialogResult resultado = DialogResult.Yes;
-                        if (File.Exists("Alumnos Exportados.csv"))
-                        {
-                            resultado = MessageBox.Show("Sobrescribir Archivos?","",MessageBoxButtons.YesNo);
-                        }
+                        DialogResult resultado = new();
+                        
                         if (result == DialogResult.Yes)
                         {
-                            if(resultado == DialogResult.Yes)
+                            if (File.Exists("Alumnos Exportados.json"))
+                            {
+                                resultado = MessageBox.Show("Sobrescribir Archivos?", "", MessageBoxButtons.YesNo);
+                            } else
+                            {
+                                resultado = DialogResult.Yes;
+                            }
+
+                            if (resultado == DialogResult.Yes)
                             {
                                 try
                                 {
@@ -135,7 +140,7 @@ namespace SysAcademy2
                                         alumnosJSON.Add(alumnoJSON);
                                     }
                                     string jsonString = JsonSerializer.Serialize(alumnosJSON, opciones);
-                                    File.WriteAllText("Alumnos_Exportados.json", jsonString);
+                                    File.WriteAllText("Alumnos Exportados.json", jsonString);
                                 } catch (Exception excepcion)
                                 {
                                     MessageBox.Show("Una Aplicacion esta usando el .Json, cierrelo y vuelva a intentar\n" + excepcion.Message);
@@ -143,7 +148,14 @@ namespace SysAcademy2
                             }
                         } else 
                         {
-                            if(resultado == DialogResult.Yes)
+                            if (File.Exists("Alumnos Exportados.csv"))
+                            {
+                                resultado = MessageBox.Show("Sobrescribir Archivos?", "", MessageBoxButtons.YesNo);
+                            } else
+                            {
+                                resultado = DialogResult.Yes;
+                            }
+                            if (resultado == DialogResult.Yes)
                             {
                                 string stringCSV = "id,nombre,password,perfil,materiaA,estadoMA,activo\n";
                                 StreamWriter escritor = new StreamWriter("Alumnos Exportados.csv");

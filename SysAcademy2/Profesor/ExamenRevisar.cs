@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using datos;
 using Entidades;
-using D = datos.Usuarios;
 
 namespace SysAcademy2
 {

@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Entidades;
 using datos;
-using D = datos.Usuarios;
 using System.DirectoryServices.ActiveDirectory;
 
 namespace SysAcademy

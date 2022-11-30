@@ -15,6 +15,7 @@ namespace SysAcademy2
 {
     public partial class DocenteLista : Form
     {
+        private Usuario? activo = SqlUsuario.ObtenerUsuarioActivo();
         public DocenteLista()
         {
             InitializeComponent();
@@ -27,7 +28,6 @@ namespace SysAcademy2
             lbl_Profesor.Text = "";
             lbl_Materia.Text = "";
             lb_Examenes.Items.Clear();
-            Usuario activo = SqlUsuario.ObtenerUsuarioActivo();
             var Lista = SqlG<Examen>.ObtenerTodosdelDatoT();
           //var Lista = Sql.ObtenerTodosLosExamenes();
             foreach (var examen in Lista)
@@ -52,7 +52,7 @@ namespace SysAcademy2
                         Materia? materia = SqlMateria.ObtenerMateria("id",examen.materia);
                         if(materia != null)
                         {
-                            Usuario profesor = SqlUsuario.ObtenerUsuario(materia.GetProfesorAsignado());
+                            Usuario? profesor = SqlUsuario.ObtenerUsuario(materia.GetProfesorAsignado());
                             lbl_Nombre.Text = examen.GetNombre();
                             lbl_Fecha.Text = examen.fecha.Date.ToString();
                             lbl_Profesor.Text = profesor.GetNombre();
@@ -77,12 +77,14 @@ namespace SysAcademy2
 
         private void btn_Modify_Click(object sender, EventArgs e)
         {
-            Usuario ActiveUser = Usuarios.BuscarActivo();
-            if (Usuarios.VerifProfesor(lbl_Profesor.Text))
+            if(activo != null)
             {
-                Docentes FrmModificarMateria = new();
-                FrmModificarMateria.Show();
-                FrmModificarMateria.btn_CExamen.Text = "Modificar Examen";
+                if (activo.GetNombre() == lbl_Profesor.Text)
+                {
+                    Docentes FrmModificarMateria = new();
+                    FrmModificarMateria.Show();
+                    FrmModificarMateria.btn_CExamen.Text = "Modificar Examen";
+                }
             }
         }
     }

@@ -30,9 +30,9 @@ namespace datos
         }
 
         //global | Usuario
-        public static Usuario ObtenerUsuario(int id)
+        public static Usuario? ObtenerUsuario(int id)
         {
-            Usuario usuario = new Usuario();
+            Usuario? usuario = new Usuario();
             try
             {
                 command.CommandText = $"SELECT u.id,u.nombre,password,p.nombre perfil,activo FROM Usuario AS U INNER JOIN Permiso AS p ON u.id_permiso=p.id WHERE u.id = {id}";
@@ -46,7 +46,7 @@ namespace datos
             }
             catch (Exception)
             {
-                throw new Exception("Error de conexión a la base de datos");
+                usuario = null;
             }
             finally
             {
@@ -60,7 +60,7 @@ namespace datos
         }
         public static Usuario? ObtenerUsuario(string nombre)
         {
-            Usuario? usuario = new Usuario();
+            Usuario? usuario = null;
             try
             {
 
@@ -73,7 +73,7 @@ namespace datos
                     usuario = Usuario.PasoDeInformacion(reader);
                 }
             }
-            catch (SqlException)
+            catch (Exception)
             {
                 usuario = null;
                 
@@ -118,7 +118,7 @@ namespace datos
             return usuario;
         }
 
-        //Inicio - Main | Inicio Secion Usuario
+        //Inicio - Main | Inicio Sesion Usuario
         public static void ActualizarUsuario(Usuario usuario, string columna, int dato)
         {
             try

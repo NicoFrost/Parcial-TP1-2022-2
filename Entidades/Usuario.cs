@@ -11,21 +11,7 @@ namespace Entidades
         private string? perfil;
         public bool activo { get; set; }
 
-        public static int GetLastID(List<Usuario> usuarios)
-        {
-            int lastId = 0;
-            
-            foreach (var usuario in usuarios)
-            {
-                if (usuario.GetID() > lastId)
-                {
-                    lastId = usuario.GetID();
-                }
-            }
-
-            return lastId;
-        }
-        public string GetPassword()
+        public string? GetPassword()
         {
             return password;
         }
@@ -34,7 +20,7 @@ namespace Entidades
             this.password = password;
         }
             
-        public string GetPerfil()
+        public string? GetPerfil()
         {
             return perfil;
         }
@@ -43,17 +29,6 @@ namespace Entidades
             this.perfil = perfil;
         }
 
-        public void AsignarID(List<Materia> lista)
-        {
-            if (lista.Count == 0)
-            {
-                SetID(0);
-            }
-            else
-            {
-                SetID(lista.Last().GetID() + 1);
-            }
-        }
         public static Alumno ConvertirAlumno(Usuario usuario)
         {
             Alumno alumno = new();
@@ -67,11 +42,6 @@ namespace Entidades
             return alumno;
         }
         public Usuario() {
-            SetID(-1);
-            SetNombre("");
-            SetPassword("");
-            SetPassword("");
-            SetPerfil("");
         }
         public Usuario(int id, string nombre, string password, string perfil, bool activo)
         {
@@ -257,7 +227,7 @@ namespace Entidades
                 id = value;
             }
         }
-        public string Nombre
+        public string? Nombre
         {
             get
             {

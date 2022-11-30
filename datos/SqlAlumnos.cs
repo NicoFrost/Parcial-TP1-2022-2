@@ -58,7 +58,7 @@ namespace datos
         public static Alumno? ObtenerAlumno(string nombre, int IDmateria)
         {
             Alumno? alumno = new Alumno();
-            Usuario usuario = SqlUsuario.ObtenerUsuario(nombre);
+            Usuario? usuario = SqlUsuario.ObtenerUsuario(nombre);
             try
             {
                 command.CommandText = $"SELECT * FROM UsuarioAlumno WHERE id = {usuario.GetID()} AND materia = {IDmateria}";

@@ -33,9 +33,9 @@ namespace SysAcademy2
         private void lb_materias_SelectedIndexChanged(object sender, EventArgs e)
         {
             lb_Alumnos.Items.Clear();
-            if(lb_materias.SelectedIndex != null)
+            if(lb_materias.SelectedItem != null)
             {
-                Materia materia = SqlMateria.ObtenerMateria(lb_materias.SelectedItem.ToString());
+                Materia? materia = SqlMateria.ObtenerMateria(lb_materias.SelectedItem.ToString());
               //Materia materia = Materias.listaMaterias.Find(objecto => objecto.GetNombre() == lb_materias.SelectedItem.ToString());
                 if (materia != null)
                 {

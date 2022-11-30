@@ -239,8 +239,8 @@ namespace SysAcademy
                 {
                     int idMateria = alumno.materiaA;
                     Materia? materia = SqlMateria.ObtenerMateria("id",idMateria);
-                  //Materia materia = Materias.MateriafromList(idMateria);
-                    if(materia != null)
+                    //Materia materia = Materias.MateriafromList(idMateria);
+                    if (materia != null)
                     {
                         if (idMateria != -1 && !cbox_materia.Items.Contains(materia.GetNombre()))
                         {

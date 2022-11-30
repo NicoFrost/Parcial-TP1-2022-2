@@ -87,20 +87,21 @@ namespace SysAcademy
                         cb_Materia.Items.Add(materias.GetNombre());
                     }
                 }
-                Materia materiaTemp = new();
+                List<Materia> materiaTemp = new List<Materia>();
                 foreach(var materia in /*Sql.ObtenerTodasLasMaterias()*/SqlG<Materia>.ObtenerTodosdelDatoT())
                 {
                     if(materia.GetProfesorAsignado() == ActiveUser.GetID())
                     {
-                        materiaTemp = materia;
-                        break;
+                        materiaTemp.Add(materia);
                     }
                 }
-                foreach (var examen in SqlG<Examen>.ObtenerTodosdelDatoT())
+                List<Examen>? examenes = SqlG<Examen>.ObtenerTodosdelDatoT();
+                foreach (var examen in examenes)
                 {
-                    if (ActiveUser.GetID() == materiaTemp.GetProfesorAsignado() && materiaTemp.GetID() == examen.materia)
+                    Materia? materia = SqlMateria.ObtenerMateria("id",examen.materia);
+                    //if (ActiveUser.GetID() == mat.get profesor asignado && materiaTemp.GetID() == examen.materia)
+                    if(materiaTemp.Find(materia => materia.GetID() == examen.materia) != null)
                     {
-                        Materia? materia = SqlMateria.ObtenerMateria("id", examen.materia);
                         if(materia != null)
                         {
                             lb_Examenes.Items.Add($"{examen.GetNombre()} {examen.fecha.ToShortDateString()} ({materia.GetNombre()})");
@@ -113,6 +114,11 @@ namespace SysAcademy
         private void Docentes_Shown(object sender, EventArgs e)
         {
             ActiveControl = txt_NombreExamen;
+        }
+
+        private void lb_Examenes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
