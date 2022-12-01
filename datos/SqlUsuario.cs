@@ -32,7 +32,7 @@ namespace datos
         //global | Usuario
         public static Usuario? ObtenerUsuario(int id)
         {
-            Usuario? usuario = new Usuario();
+            Usuario? usuario = null;
             try
             {
                 command.CommandText = $"SELECT u.id,u.nombre,password,p.nombre perfil,activo FROM Usuario AS U INNER JOIN Permiso AS p ON u.id_permiso=p.id WHERE u.id = {id}";

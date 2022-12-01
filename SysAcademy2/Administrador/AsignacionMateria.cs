@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using System.Text.Json;
 using Entidades;
 using System.IO;
+using SysAcademy2.Administrador;
+using System.Reflection;
 
 namespace SysAcademy2
 {
@@ -183,6 +185,40 @@ namespace SysAcademy2
                         }
                     }
                 }
+            }
+        }
+
+        private void btn_Importar_Click(object sender, EventArgs e)
+        {
+            //Lectura Archivo
+
+            pathImportar pathForm = new();
+            pathForm.ShowDialog();
+            string path = pathForm.path;
+            string jsonString;
+            try
+            {
+                jsonString = File.ReadAllText(path);
+
+
+                // DeSerializacion
+                List<AlumnoJSON>? alumnosJSON = JsonSerializer.Deserialize<List<AlumnoJSON>>(jsonString);
+                Alumno? alumnoNull = new();
+                if(alumnosJSON != null && alumnosJSON != null)
+                {
+                    foreach(var alumnoJ in alumnosJSON)
+                    {
+                       Alumno alumno = AlumnoJSON.ConvertirJsonAAlumno(alumnoJ);
+                        //modificar aqui si el usuario a meter puede ser viejo de && a ||
+                        Usuario userAlumnoNew = new(0,alumno.GetNombre(),alumno.GetPassword(),alumno.GetPerfil(),alumno.activo);
+                        SqlUsuario.InsertarUsuario(userAlumnoNew);
+                        alumno.SetID(SqlUsuario.ObtenerUsuario(userAlumnoNew.GetNombre()).GetID());
+                        SqlAlumnos.InsertarAlumno(alumno);
+                    }
+                }
+            } catch (Exception)
+            {
+                MessageBox.Show("Error de lectura introduszca una direccion valida\nConsejos: no incluya el .json al final del nombre\n* No ponga el nombre del archivo al final de la direccion");
             }
         }
     }

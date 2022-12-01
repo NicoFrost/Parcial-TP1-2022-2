@@ -112,7 +112,8 @@ namespace SysAcademy
                 class4.Enabled = true;
                 class4.Image = imagenClassroom;
 
-                cbox_materia.Enabled = true;
+                button1.Enabled = true;
+                //cbox_materia.Enabled = true;
                 
             }
             if (Sql.VerificarPermisos("Dar Asistencia a materias"))
@@ -240,13 +241,13 @@ namespace SysAcademy
                     int idMateria = alumno.materiaA;
                     Materia? materia = SqlMateria.ObtenerMateria("id",idMateria);
                     //Materia materia = Materias.MateriafromList(idMateria);
-                    if (materia != null)
-                    {
-                        if (idMateria != -1 && !cbox_materia.Items.Contains(materia.GetNombre()))
-                        {
-                            cbox_materia.Items.Add(materia.GetNombre());
-                        }
-                    }
+                    //if (materia != null)
+                    //{
+                    //    if (idMateria != -1 && !cbox_materia.Items.Contains(materia.GetNombre()))
+                    //    {
+                    //        cbox_materia.Items.Add(materia.GetNombre());
+                    //    }
+                    //}
                 }
 
                 //buscar Conexion entre Examen y Alumno Activo

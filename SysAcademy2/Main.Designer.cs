@@ -41,7 +41,6 @@
             this.asignacionProfesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nuevaMateriaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nuevoUsuarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cbox_materia = new System.Windows.Forms.ComboBox();
             this.pb_asistencias = new System.Windows.Forms.PictureBox();
             this.class1 = new System.Windows.Forms.PictureBox();
             this.pb_Inscripcion = new System.Windows.Forms.PictureBox();
@@ -171,16 +170,6 @@
             this.nuevoUsuarioToolStripMenuItem.Text = "Nuevo Usuario";
             this.nuevoUsuarioToolStripMenuItem.Click += new System.EventHandler(this.nuevoUsuarioToolStripMenuItem_Click);
             // 
-            // cbox_materia
-            // 
-            this.cbox_materia.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.cbox_materia.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbox_materia.Enabled = false;
-            this.cbox_materia.Location = new System.Drawing.Point(12, 85);
-            this.cbox_materia.Name = "cbox_materia";
-            this.cbox_materia.Size = new System.Drawing.Size(121, 23);
-            this.cbox_materia.TabIndex = 4;
-            // 
             // pb_asistencias
             // 
             this.pb_asistencias.BackColor = System.Drawing.Color.Blue;
@@ -269,8 +258,9 @@
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.Transparent;
+            this.button1.Enabled = false;
             this.button1.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.button1.Location = new System.Drawing.Point(224, 85);
+            this.button1.Location = new System.Drawing.Point(12, 88);
             this.button1.Margin = new System.Windows.Forms.Padding(0);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(128, 23);
@@ -292,7 +282,6 @@
             this.Controls.Add(this.pb_Inscripcion);
             this.Controls.Add(this.class1);
             this.Controls.Add(this.pb_asistencias);
-            this.Controls.Add(this.cbox_materia);
             this.Controls.Add(this.Mensaje);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -335,7 +324,6 @@
         private ToolStripMenuItem estadosAlumnosToolStripMenuItem;
         private ToolStripMenuItem asignacionProfesToolStripMenuItem;
         private ToolStripMenuItem nuevaMateriaToolStripMenuItem;
-        private ComboBox cbox_materia;
         private PictureBox pb_asistencias;
         private PictureBox class1;
         private PictureBox pb_Inscripcion;

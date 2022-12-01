@@ -36,6 +36,7 @@
             this.btn_Modify = new System.Windows.Forms.Button();
             this.btn_close = new System.Windows.Forms.Button();
             this.btn_Exportar = new System.Windows.Forms.Button();
+            this.btn_Importar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listBox1
@@ -110,7 +111,7 @@
             // btn_Exportar
             // 
             this.btn_Exportar.Enabled = false;
-            this.btn_Exportar.Location = new System.Drawing.Point(131, 128);
+            this.btn_Exportar.Location = new System.Drawing.Point(121, 101);
             this.btn_Exportar.Name = "btn_Exportar";
             this.btn_Exportar.Size = new System.Drawing.Size(112, 23);
             this.btn_Exportar.TabIndex = 7;
@@ -118,11 +119,22 @@
             this.btn_Exportar.UseVisualStyleBackColor = true;
             this.btn_Exportar.Click += new System.EventHandler(this.btn_Exportar_Click);
             // 
+            // btn_Importar
+            // 
+            this.btn_Importar.Location = new System.Drawing.Point(121, 130);
+            this.btn_Importar.Name = "btn_Importar";
+            this.btn_Importar.Size = new System.Drawing.Size(112, 23);
+            this.btn_Importar.TabIndex = 8;
+            this.btn_Importar.Text = "Importar Alumnos";
+            this.btn_Importar.UseVisualStyleBackColor = true;
+            this.btn_Importar.Click += new System.EventHandler(this.btn_Importar_Click);
+            // 
             // AsignacionMateria
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(535, 165);
+            this.Controls.Add(this.btn_Importar);
             this.Controls.Add(this.btn_Exportar);
             this.Controls.Add(this.btn_close);
             this.Controls.Add(this.btn_Modify);
@@ -149,5 +161,6 @@
         private Button btn_Modify;
         private Button btn_close;
         private Button btn_Exportar;
+        private Button btn_Importar;
     }
 }

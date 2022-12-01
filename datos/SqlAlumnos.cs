@@ -28,30 +28,36 @@ namespace datos
         //global | Alumno
         public static Alumno? ObtenerAlumno(int id)
         {
-            Alumno? alumno = new Alumno();
-            Usuario usuario = SqlUsuario.ObtenerUsuario(id);
-            try
+            Alumno? alumno = null;
+            Usuario? usuario = SqlUsuario.ObtenerUsuario(id);
+            if (usuario != null)
             {
-                command.CommandText = $"SELECT * FROM UsuarioAlumno WHERE id = '{id}'";
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
+                try
                 {
-                    alumno = Alumno.PasoDeInformacionAlumno(reader, usuario);
-                }
-            }
-            catch (Exception)
-            {
-                throw new Exception("Error de conexión a la base de datos");
-            }
-            finally
-            {
-                if (connection.State == ConnectionState.Open)
-                {
-                    connection.Close();
-                }
+                    command.CommandText = $"SELECT * FROM UsuarioAlumno WHERE id = {id}";
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
 
+                    while (reader.Read())
+                    {
+                        alumno = Alumno.PasoDeInformacionAlumno(reader, usuario);
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Error de conexión a la base de datos");
+                }
+                finally
+                {
+                    if (connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+
+                }
+            } else
+            {
+                Console.WriteLine("valor de id no posible, intente de nuevo y luego contacte un administrador si vuelve a ver este mensaje");
             }
             return alumno;
         }
@@ -89,8 +95,13 @@ namespace datos
         {
             try
             {
+                int estado = 1;
+                if(alumno.estadoMA == false)
+                {
+                    estado = 0;
+                }
                 //si llegas cambia esto!! permisos en vez de nombre pasalos a numeros 0 admin, 1 profe, 2 alumno
-                command.CommandText = $"INSERT INTO UsuarioAlumno VALUES ({alumno.GetID()},{alumno.materiaA},{alumno.estadoMA})";
+                command.CommandText = $"INSERT INTO UsuarioAlumno VALUES ({alumno.GetID()},{alumno.materiaA},{estado})";
                 connection.Open();
 
                 command.ExecuteNonQuery();

@@ -300,6 +300,19 @@ namespace Entidades
             this.activo = activo;
         }
 
+        public static Alumno ConvertirJsonAAlumno(AlumnoJSON alumno)
+        {
+            Alumno alumnoNew = new();
+            if(alumno.nombre != null && alumno.password != null && alumno.perfil != null)
+            {
+                alumnoNew.SetNombre(alumno.nombre);
+                alumnoNew.SetPassword(alumno.password);
+                alumnoNew.SetPerfil(alumno.perfil);
+                alumnoNew.materiaA = alumno.materiaA;
+
+            }
+            return alumnoNew;
+        }
         public AlumnoJSON()
         {
         }

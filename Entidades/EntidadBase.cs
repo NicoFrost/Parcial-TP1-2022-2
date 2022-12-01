@@ -6,12 +6,18 @@ using System.Threading.Tasks;
 
 namespace Entidades
 {
-    public abstract class EntidadBase
+    
+    public interface IGettersSettersID
+    {
+        public void SetID(int id);
+        public int GetID();
+    }
+    public abstract class EntidadBase : IGettersSettersID
     {
         private int id;
         private string nombre;
 
-        
+
         public virtual int GetID()
         {
             return id;
